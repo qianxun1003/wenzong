@@ -1,0 +1,13 @@
+# Render Blueprint：仅部署 FastAPI 后端
+# 在 Render Dashboard → New → Blueprint 选择本仓库，或手动创建 Web Service 并指向 backend/
+services:
+  - type: web
+    name: wenzong-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
