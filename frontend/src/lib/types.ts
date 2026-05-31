@@ -63,6 +63,27 @@ export interface KnowledgeEntry {
   createdAt?: string;
 }
 
+export interface KnowledgeChunkItem {
+  id: string;
+  content: string;
+  created_at?: string | null;
+}
+
+export interface KnowledgeGroupItem {
+  tag: string;
+  source: string;
+  chunk_count: number;
+  preview: string;
+  created_at?: string | null;
+  chunks: KnowledgeChunkItem[];
+}
+
+export interface KnowledgeListResponse {
+  groups: KnowledgeGroupItem[];
+  total_chunks: number;
+  total_groups: number;
+}
+
 export interface UploadResult {
   filename: string;
   chunks: number;

@@ -135,6 +135,13 @@ export const JAPAN_REGION_HOTSPOTS: Record<
 
 export const MAP_LAYER_OPTIONS: MapLayerOption[] = [
   {
+    id: "comprehensive",
+    label: "综合模式",
+    shortLabel: "综合",
+    icon: Layers,
+    description: "多学科考点一图串联",
+  },
+  {
     id: "geo",
     label: "地理模式",
     shortLabel: "地理",
@@ -161,13 +168,6 @@ export const MAP_LAYER_OPTIONS: MapLayerOption[] = [
     shortLabel: "历史",
     icon: History,
     description: "重大事件、殖民史与独立运动",
-  },
-  {
-    id: "comprehensive",
-    label: "综合模式",
-    shortLabel: "综合",
-    icon: Layers,
-    description: "多学科考点一图串联",
   },
 ];
 

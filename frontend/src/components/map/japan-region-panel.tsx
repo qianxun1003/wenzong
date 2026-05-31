@@ -1,142 +1,185 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { GeoMapCanvas } from "@/components/map/geo-map-canvas";
+import { MapPanZoomViewport } from "@/components/map/map-pan-zoom-viewport";
+import { MapRegionSidebar } from "@/components/map/map-region-sidebar";
+import { toPrefectureSlug } from "@/lib/geo/japan-prefecture-names";
 import {
-  DEFAULT_JAPAN_VIEWPORT,
-  JAPAN_REGION_HOTSPOTS,
-  JAPAN_REGIONS,
-  JAPAN_REGION_VIEWPORTS,
-  type JapanRegionId,
-} from "@/lib/map-config";
+  buildJapanPrefectureSidebarItemsForRegion,
+  buildJapanRegionSidebarItems,
+  getJapanPrefectureLabel,
+  isJapanPrefectureSelection,
+  parseJapanPrefectureSelection,
+} from "@/lib/map-sidebar-items";
+import { JAPAN_REGIONS, type JapanRegionId, type MapLayerMode } from "@/lib/map-config";
 import { cn } from "@/lib/utils";
+
+type JapanBrowseMode = "region" | "prefecture";
 
 interface JapanRegionPanelProps {
   selectedId: JapanRegionId | null;
   onSelect: (id: JapanRegionId) => void;
+  layerMode: MapLayerMode;
   layerLabel: string;
 }
 
-function getTransform(viewport: { x: number; y: number; scale: number }) {
-  const tx = 200 - viewport.x * viewport.scale;
-  const ty = 250 - viewport.y * viewport.scale;
-  return `translate(${tx} ${ty}) scale(${viewport.scale})`;
-}
+export function JapanRegionPanel({ selectedId, onSelect, layerMode, layerLabel }: JapanRegionPanelProps) {
+  const [browseMode, setBrowseMode] = useState<JapanBrowseMode>("region");
+  const [sidebarSelectionId, setSidebarSelectionId] = useState<string | null>(null);
 
-export function JapanRegionPanel({ selectedId, onSelect, layerLabel }: JapanRegionPanelProps) {
   const selectedRegion = JAPAN_REGIONS.find((r) => r.id === selectedId);
-  const viewport = selectedId ? JAPAN_REGION_VIEWPORTS[selectedId] : DEFAULT_JAPAN_VIEWPORT;
+  const selectedPrefectureName = getJapanPrefectureLabel(sidebarSelectionId);
+
+  const sidebarItems = useMemo(() => {
+    if (browseMode === "region") return buildJapanRegionSidebarItems();
+    if (!selectedId) return [];
+    return buildJapanPrefectureSidebarItemsForRegion(selectedId);
+  }, [browseMode, selectedId]);
+
+  const sidebarHint =
+    browseMode === "region"
+      ? "八大地方区分 · 快速定位区域"
+      : selectedId
+        ? `${selectedRegion?.name ?? ""} · ${sidebarItems.length} 个都道府县`
+        : "请先在地图或侧栏选择地方区分";
+
+  const activeSidebarId =
+    browseMode === "region"
+      ? selectedId
+      : selectedPrefectureName && selectedId
+        ? `${selectedId}:${selectedPrefectureName}`
+        : sidebarSelectionId;
+
+  const handleSidebarSelect = (id: string) => {
+    if (browseMode === "region") {
+      setSidebarSelectionId(null);
+      onSelect(id as JapanRegionId);
+      return;
+    }
+
+    setSidebarSelectionId(id);
+    const regionId = parseJapanPrefectureSelection(id);
+    if (regionId) onSelect(regionId);
+  };
+
+  const handleMapSelect = (id: JapanRegionId) => {
+    onSelect(id);
+    if (browseMode === "prefecture" && sidebarSelectionId && !isJapanPrefectureSelection(sidebarSelectionId)) {
+      setSidebarSelectionId(null);
+    }
+  };
+
+  const handleBrowseModeChange = (mode: JapanBrowseMode) => {
+    setBrowseMode(mode);
+    setSidebarSelectionId(null);
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="map-sub-panel">
-        <div className="flex items-center justify-between border-b border-border/50 bg-background/50 px-4 py-3 sm:px-5">
-          <div>
-            <p className="text-sm font-medium text-foreground">区域地图</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              {selectedRegion ? `当前聚焦：${selectedRegion.name}` : "点击地方区分或地图热区进行选择"}
-            </p>
+    <div className="map-explorer-panel map-sub-panel">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 bg-background/50 px-4 py-3 sm:px-5">
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-medium text-foreground">区域探索</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {browseMode === "region"
+              ? selectedRegion
+                ? `当前聚焦：${selectedRegion.name} · 点击下方按钮进入篇章学习`
+                : "从左侧选择地方区分，或在地图上点击"
+              : selectedRegion
+                ? selectedPrefectureName
+                  ? `当前聚焦：${selectedPrefectureName}（${selectedRegion.name}）`
+                  : `当前聚焦：${selectedRegion.name}`
+                : "请先在地图或侧栏选择地方区分"}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="map-explorer-mode-toggle" role="tablist" aria-label="浏览方式">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={browseMode === "region"}
+              onClick={() => handleBrowseModeChange("region")}
+              className={cn(browseMode === "region" && "map-explorer-mode-toggle-active")}
+            >
+              地方区分
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={browseMode === "prefecture"}
+              onClick={() => handleBrowseModeChange("prefecture")}
+              className={cn(browseMode === "prefecture" && "map-explorer-mode-toggle-active")}
+            >
+              都道府县
+            </button>
           </div>
           <Badge variant="outline" className="bg-background/60">
             {layerLabel}视图
           </Badge>
         </div>
-
-        <div className="relative h-[260px] overflow-hidden bg-gradient-to-br from-chart-1/15 via-background/40 to-primary/10 sm:h-[300px]">
-          <svg viewBox="0 0 400 500" className="mx-auto h-full max-w-[320px]" aria-label="日本区域地图">
-            <g
-              transform={getTransform(viewport)}
-              className="transition-all duration-700 ease-out"
-            >
-              <path
-                d="M220 40 L280 70 L300 130 L290 200 L250 260 L210 320 L180 400 L150 460 L120 420 L100 350 L110 280 L130 210 L160 140 L190 80 Z"
-                fill="currentColor"
-                className="text-primary/[0.06]"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              {JAPAN_REGIONS.map((region) => {
-                const spot = JAPAN_REGION_HOTSPOTS[region.id];
-                const active = selectedId === region.id;
-                return (
-                  <g key={region.id}>
-                    <ellipse
-                      cx={spot.cx}
-                      cy={spot.cy}
-                      rx={spot.rx}
-                      ry={spot.ry}
-                      className={cn(
-                        "cursor-pointer transition-all duration-300",
-                        active ? "fill-primary/30 stroke-primary/50" : "fill-primary/10 stroke-primary/20 hover:fill-primary/18"
-                      )}
-                      strokeWidth={active ? 2.5 : 1.5}
-                      onClick={() => onSelect(region.id)}
-                      role="button"
-                      aria-label={region.name}
-                    />
-                    {active && (
-                      <text
-                        x={spot.cx}
-                        y={spot.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        className="pointer-events-none fill-foreground text-[10px] font-semibold"
-                      >
-                        {region.name.replace("地方", "")}
-                      </text>
-                    )}
-                  </g>
-                );
-              })}
-            </g>
-          </svg>
-
-          {selectedRegion && (
-            <div className="absolute inset-x-0 bottom-4 flex justify-center px-4">
-              <Link
-                href={`/map/japan/${selectedRegion.id}`}
-                className={cn(
-                  buttonVariants({ size: "sm" }),
-                  "gap-1.5 gradient-academy shadow-md"
-                )}
-              >
-                进入{selectedRegion.name}学习
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          )}
-        </div>
       </div>
 
-      <div>
-        <p className="compose-zone-label mb-4">选择地方区分</p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {JAPAN_REGIONS.map((region) => {
-            const active = selectedId === region.id;
-            return (
-              <button
-                key={region.id}
-                type="button"
-                onClick={() => onSelect(region.id)}
-                className={cn("mode-card text-left", active && "mode-card-active")}
-              >
-                <p className="text-base font-semibold text-foreground">{region.name}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{region.subtitle}</p>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {region.prefectures.slice(0, 3).map((pref) => (
-                    <span key={pref} className="mode-tag">
-                      {pref}
-                    </span>
-                  ))}
-                  {region.prefectures.length > 3 && (
-                    <span className="mode-tag">+{region.prefectures.length - 3}</span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
+      <div className="map-explorer-body map-explorer-body-japan">
+        <MapRegionSidebar
+          items={sidebarItems}
+          selectedId={activeSidebarId}
+          onSelect={handleSidebarSelect}
+          searchPlaceholder={browseMode === "region" ? "搜索地方区分…" : "搜索都道府县…"}
+          hint={sidebarHint}
+          emptyMessage={
+            browseMode === "prefecture" && !selectedId
+              ? "请先在地图或「地方区分」中选择区域"
+              : undefined
+          }
+          className="map-explorer-sidebar map-explorer-sidebar-japan"
+        />
+
+        <div className="map-explorer-main map-explorer-main-japan flex min-h-0 min-w-0 flex-1 flex-col">
+          <div className="map-explorer-map map-explorer-map-japan relative flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-gradient-to-br from-chart-1/15 via-background/40 to-primary/10">
+            <MapPanZoomViewport
+              resetKey={`${selectedId ?? ""}-${browseMode}-${sidebarSelectionId ?? ""}`}
+              className="h-full w-full"
+            >
+              <GeoMapCanvas
+                kind="japan"
+                layerMode={layerMode}
+                selectedRegionId={selectedId}
+                onSelect={(id) => handleMapSelect(id as JapanRegionId)}
+                fitToSelection={false}
+                showLabels={false}
+                ariaLabel="日本都道府县地图"
+                className="h-full w-full"
+              />
+            </MapPanZoomViewport>
+
+            {browseMode === "region" && selectedRegion && (
+              <div className="absolute inset-x-0 bottom-3 flex justify-center px-4">
+                <Link
+                  href={`/map/japan/${selectedRegion.id}`}
+                  className={cn(buttonVariants({ size: "sm" }), "gap-1.5 gradient-academy shadow-md")}
+                >
+                  进入{selectedRegion.name}学习
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            )}
+
+            {browseMode === "prefecture" && selectedRegion && selectedPrefectureName && (
+              <div className="absolute inset-x-0 bottom-3 flex justify-center px-4">
+                <Link
+                  href={`/map/japan/${selectedRegion.id}/${toPrefectureSlug(selectedPrefectureName)}`}
+                  className={cn(buttonVariants({ size: "sm" }), "gap-1.5 gradient-academy shadow-md")}
+                >
+                  进入{selectedPrefectureName}学习
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

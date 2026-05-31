@@ -4,7 +4,7 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from app.services.document_parser import chunk_text, parse_file
 from app.services.embeddings import embed_texts
-from app.services.supabase_store import store_chunks
+from app.services.supabase_store import embed_inputs_for_chunks, store_chunks
 
 router = APIRouter(prefix="/api/documents", tags=["documents"])
 
@@ -26,12 +26,9 @@ async def upload_documents(
                 raise ValueError("未能从文件中提取到文字内容")
 
             chunks = chunk_text(text)
-            embeddings = await embed_texts(chunks)
-            count = await store_chunks(
-                chunks,
-                embeddings,
-                metadata={"source": filename, "tag": filename},
-            )
+            metadata = {"source": filename, "tag": filename}
+            embeddings = await embed_texts(embed_inputs_for_chunks(chunks, metadata))
+            count = await store_chunks(chunks, embeddings, metadata=metadata)
             results.append(
                 {"filename": filename, "chunks": count, "status": "success"}
             )

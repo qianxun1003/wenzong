@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AlertCircle, CheckCircle2, Database, FileUp, PenLine } from "lucide-react";
+import { AlertCircle, BookOpen, CheckCircle2, Database, FileUp, PenLine } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileUploadPanel } from "./file-upload-panel";
 import { DirectEntryPanel } from "./direct-entry-panel";
+import { KnowledgeListPanel } from "./knowledge-list-panel";
 import { checkBackendHealth } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +16,9 @@ export function TeacherDashboard() {
     llm: boolean;
     provider?: string | null;
   } | null>(null);
+  const [listRefreshKey, setListRefreshKey] = useState(0);
+
+  const bumpKnowledgeList = () => setListRefreshKey((v) => v + 1);
 
   useEffect(() => {
     checkBackendHealth()
@@ -81,8 +85,12 @@ export function TeacherDashboard() {
         </div>
       )}
 
-      <Tabs defaultValue="upload" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 bg-muted/50 p-1">
+      <Tabs defaultValue="library" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 bg-muted/50 p-1">
+          <TabsTrigger value="library" className="gap-2 data-[state=active]:bg-background">
+            <BookOpen className="h-4 w-4" />
+            已录入考点
+          </TabsTrigger>
           <TabsTrigger value="upload" className="gap-2 data-[state=active]:bg-background">
             <FileUp className="h-4 w-4" />
             文件上传
@@ -92,11 +100,14 @@ export function TeacherDashboard() {
             直接录入
           </TabsTrigger>
         </TabsList>
+        <TabsContent value="library" className="mt-6">
+          <KnowledgeListPanel refreshKey={listRefreshKey} />
+        </TabsContent>
         <TabsContent value="upload" className="mt-6">
-          <FileUploadPanel />
+          <FileUploadPanel onUploaded={bumpKnowledgeList} />
         </TabsContent>
         <TabsContent value="direct" className="mt-6">
-          <DirectEntryPanel />
+          <DirectEntryPanel onSaved={bumpKnowledgeList} />
         </TabsContent>
       </Tabs>
     </div>

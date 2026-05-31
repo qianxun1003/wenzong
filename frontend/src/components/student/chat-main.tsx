@@ -14,6 +14,9 @@ interface ChatMainProps {
   messages: ChatMessage[];
   onSend: (content: string, mode: AnswerMode) => Promise<void>;
   isLoading?: boolean;
+  initialQuestion?: string;
+  initialMode?: AnswerMode;
+  fromMap?: boolean;
 }
 
 function hasUserMessages(messages: ChatMessage[]) {
@@ -26,13 +29,29 @@ const DEFAULT_SUGGESTIONS = [
   "世界上的峡湾地貌的具体例子？",
 ];
 
-export function ChatMain({ messages, onSend, isLoading }: ChatMainProps) {
-  const [input, setInput] = useState("");
-  const [selectedMode, setSelectedMode] = useState<AnswerMode | null>(null);
+export function ChatMain({
+  messages,
+  onSend,
+  isLoading,
+  initialQuestion,
+  initialMode,
+  fromMap,
+}: ChatMainProps) {
+  const [input, setInput] = useState(initialQuestion ?? "");
+  const [selectedMode, setSelectedMode] = useState<AnswerMode | null>(initialMode ?? null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const prefilledRef = useRef(Boolean(initialQuestion));
 
   const userHasSent = hasUserMessages(messages);
   const themeClass = getModeShellClass();
+
+  useEffect(() => {
+    if (initialQuestion) {
+      setInput(initialQuestion);
+      prefilledRef.current = true;
+    }
+    if (initialMode) setSelectedMode(initialMode);
+  }, [initialQuestion, initialMode]);
 
   useEffect(() => {
     if (userHasSent) {
@@ -53,6 +72,11 @@ export function ChatMain({ messages, onSend, isLoading }: ChatMainProps) {
       <div className={cn("chat-ambient", themeClass)}>
         <div className="hero-scroll-area">
           <div className="hero-scroll-inner">
+            {fromMap && prefilledRef.current && (
+              <div className="welcome-banner mb-4 text-xs text-muted-foreground">
+                来自地图探索 · 已预填考点问题，选择模式后即可发送
+              </div>
+            )}
             <QuestionComposePanel
               input={input}
               onInputChange={setInput}

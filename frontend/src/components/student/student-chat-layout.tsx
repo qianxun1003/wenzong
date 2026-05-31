@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { AlertCircle, PanelLeft } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,15 @@ import {
   titleFromMessage,
 } from "@/lib/chat-storage";
 import type { AnswerMode, ChatMessage, ChatSession } from "@/lib/types";
+
+const VALID_MODES: AnswerMode[] = ["basic", "eju", "deep", "chart"];
+
+function parseMode(value: string | null): AnswerMode | undefined {
+  if (value && VALID_MODES.includes(value as AnswerMode)) {
+    return value as AnswerMode;
+  }
+  return undefined;
+}
 
 function createId() {
   return crypto.randomUUID();
@@ -42,6 +52,25 @@ function initState() {
 }
 
 export function StudentChatLayout() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-[calc(100dvh-3.5rem)] items-center justify-center text-sm text-muted-foreground">
+          加载对话…
+        </div>
+      }
+    >
+      <StudentChatLayoutInner />
+    </Suspense>
+  );
+}
+
+function StudentChatLayoutInner() {
+  const searchParams = useSearchParams();
+  const initialQuestion = searchParams.get("q") ?? undefined;
+  const initialMode = parseMode(searchParams.get("mode"));
+  const fromMap = searchParams.get("from") === "map";
+
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>(() => getWelcomeMessages());
@@ -232,7 +261,14 @@ export function StudentChatLayout() {
 
           <div className="min-h-0 flex-1 overflow-hidden">
             {storageReady ? (
-              <ChatMain messages={messages} onSend={handleSend} isLoading={isLoading} />
+              <ChatMain
+                messages={messages}
+                onSend={handleSend}
+                isLoading={isLoading}
+                initialQuestion={initialQuestion}
+                initialMode={initialMode}
+                fromMap={fromMap}
+              />
             ) : (
               <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
                 加载对话…

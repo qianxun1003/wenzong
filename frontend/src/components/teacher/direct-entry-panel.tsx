@@ -10,7 +10,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { createKnowledgeEntry } from "@/lib/api";
 
-export function DirectEntryPanel() {
+interface DirectEntryPanelProps {
+  onSaved?: () => void;
+}
+
+export function DirectEntryPanel({ onSaved }: DirectEntryPanelProps) {
   const [tag, setTag] = useState("");
   const [content, setContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -26,6 +30,7 @@ export function DirectEntryPanel() {
       toast.success("考点已保存", {
         description: `「${tag}」已向量化并存入 Supabase`,
       });
+      onSaved?.();
       setTag("");
       setContent("");
     } catch (err) {

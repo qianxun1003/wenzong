@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import { Globe2, Layers, LayoutGrid } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { BackToMapHubLink } from "@/components/map/back-to-map-hub-link";
 import { MapFeatureSection } from "@/components/map/map-feature-section";
-import { MapLayerSwitcher } from "@/components/map/map-layer-switcher";
+import { MapLayerPanel } from "@/components/map/map-layer-panel";
 import { MapPageShell } from "@/components/map/map-page-shell";
 import { MapPageTitle } from "@/components/map/map-page-title";
 import { MapPuzzleEntry } from "@/components/map/map-puzzle-entry";
 import { WorldRegionPanel } from "@/components/map/world-region-panel";
-import { COUNTRY_PROFILE_SECTIONS, MAP_LAYER_OPTIONS, type MapLayerMode, type WorldRegionId } from "@/lib/map-config";
+import { MAP_LAYER_OPTIONS, type MapLayerMode, type WorldRegionId } from "@/lib/map-config";
 
 export function WorldMapLayout() {
   const [layerMode, setLayerMode] = useState<MapLayerMode>("comprehensive");
@@ -38,33 +37,27 @@ export function WorldMapLayout() {
             subtitle="选择一种视图，地图将以对应维度展示信息"
             icon={Layers}
           >
-            <MapLayerSwitcher value={layerMode} onChange={setLayerMode} />
-            <div className="map-sub-panel mt-6">
-              <div className="flex items-center justify-between border-b border-border/50 bg-background/50 px-4 py-3 sm:px-5">
-                <p className="text-sm font-medium text-foreground">图层预览</p>
-                <Badge variant="outline" className="bg-background/60">
-                  {activeLayerLabel}视图
-                </Badge>
-              </div>
-              <div className="flex min-h-[180px] items-center justify-center bg-gradient-to-br from-chart-4/20 via-background/40 to-chart-2/20 p-6 sm:min-h-[200px]">
-                <p className="text-sm text-muted-foreground">切换图层后，下方区域地图同步更新</p>
-              </div>
-            </div>
-            <MapPuzzleEntry label="开始世界地图拼图" />
+            <MapLayerPanel
+              kind="world"
+              layerMode={layerMode}
+              onLayerModeChange={setLayerMode}
+            />
+            <MapPuzzleEntry label="开始世界地图拼图" mode="world" />
           </MapFeatureSection>
 
           <MapFeatureSection
             step={2}
-            title="区域板块"
-            subtitle="选择区域篇章，地图将聚焦到对应位置"
+            title="区域探索"
+            subtitle="左侧选择区域篇章，地图聚焦后点击底部按钮进入学习"
             icon={LayoutGrid}
           >
             <p className="mb-6 text-sm text-muted-foreground">
-              国家画像含 {COUNTRY_PROFILE_SECTIONS.slice(0, 4).join("、")} 等模块。选中区域后，点击地图上的按钮继续学习。
+              点击篇章后地图会聚焦，再通过底部按钮进入。知识点内容将在教师后台录入后显示。
             </p>
             <WorldRegionPanel
               selectedId={selectedRegionId}
               onSelect={setSelectedRegionId}
+              layerMode={layerMode}
               layerLabel={activeLayerLabel}
             />
           </MapFeatureSection>

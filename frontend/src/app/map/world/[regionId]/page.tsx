@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { BackToMapHubLink } from "@/components/map/back-to-map-hub-link";
 import { MapPageShell } from "@/components/map/map-page-shell";
+import { WorldRegionDetailView } from "@/components/map/world-region-detail-view";
 import { buttonVariants } from "@/components/ui/button";
 import { WORLD_REGIONS } from "@/lib/map-config";
 import { cn } from "@/lib/utils";
@@ -20,35 +21,24 @@ export default async function WorldRegionPage({ params }: WorldRegionPageProps) 
   }
 
   return (
-    <MapPageShell>
-      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
-        <BackToMapHubLink className="mb-6 -ml-2" />
-        <Link
-          href="/map/world"
-          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-4 gap-1.5 text-muted-foreground")}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          返回世界地图
-        </Link>
-
-        <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">{region.name}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{region.subtitle}</p>
-        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{region.highlight}</p>
-
-        <div className="mt-8 map-feature-panel">
-          <div className="map-feature-panel-body">
-            <p className="text-sm text-muted-foreground">
-              {region.name}详情页开发中。后续将展示各国国家画像与 EJU 考点内容。
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {region.countries.map((country) => (
-                <span key={country} className="mode-tag">
-                  {country}
-                </span>
-              ))}
-            </div>
-          </div>
+    <MapPageShell className="h-[calc(100dvh-3.5rem)]">
+      <div className="map-region-page mx-auto max-w-5xl px-4 pt-3 pb-3 sm:px-6">
+        <div className="map-region-page-nav mb-2 flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1">
+          <BackToMapHubLink className="-ml-2" />
+          <Link
+            href="/map/world"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "h-8 gap-1 px-2 text-xs text-muted-foreground"
+            )}
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            世界地图
+          </Link>
+          <span className="text-sm font-medium text-foreground">{region.name}</span>
         </div>
+
+        <WorldRegionDetailView region={region} />
       </div>
     </MapPageShell>
   );

@@ -1,4 +1,11 @@
-import type { AnswerMode, ChatApiResponse, ChatMessage, KnowledgeEntry, UploadResult } from "./types";
+import type {
+  AnswerMode,
+  ChatApiResponse,
+  ChatMessage,
+  KnowledgeEntry,
+  KnowledgeListResponse,
+  UploadResult,
+} from "./types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -76,6 +83,13 @@ export async function createKnowledgeEntry(
     method: "POST",
     body: JSON.stringify({ tag: entry.tag, content: entry.content }),
   });
+}
+
+export async function fetchKnowledgeList(query?: string): Promise<KnowledgeListResponse> {
+  const params = new URLSearchParams();
+  if (query?.trim()) params.set("q", query.trim());
+  const qs = params.toString();
+  return request(`/api/knowledge${qs ? `?${qs}` : ""}`);
 }
 
 export function getWelcomeMessages(): ChatMessage[] {

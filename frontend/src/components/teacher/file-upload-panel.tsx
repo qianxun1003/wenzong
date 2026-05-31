@@ -13,7 +13,11 @@ import type { UploadResult } from "@/lib/types";
 const ACCEPTED = ".pdf,.doc,.docx,.md,.markdown";
 const ACCEPTED_LABEL = "PDF · Word · Markdown";
 
-export function FileUploadPanel() {
+interface FileUploadPanelProps {
+  onUploaded?: () => void;
+}
+
+export function FileUploadPanel({ onUploaded }: FileUploadPanelProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -54,6 +58,7 @@ export function FileUploadPanel() {
         toast.success("上传成功", {
           description: `已入库 ${ok.reduce((n, r) => n + r.chunks, 0)} 个知识片段`,
         });
+        onUploaded?.();
       }
       if (failed.length) {
         toast.error(`${failed.length} 个文件失败`, {
