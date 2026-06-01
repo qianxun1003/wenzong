@@ -19,20 +19,34 @@ export function WorldMapLayout() {
 
   return (
     <MapPageShell>
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <BackToMapHubLink className="mb-6 -ml-2" />
+      <div className="map-hub-content mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+        <BackToMapHubLink className="mb-4 -ml-2" />
 
         <MapPageTitle
           variant="world"
           title="世界地图"
           subtitle="八大区域板块 · 国家画像 · 地图图层"
           icon={Globe2}
-          className="mb-10"
+          className="mb-7"
         />
 
-        <div className="space-y-8">
+        <div className="space-y-6">
           <MapFeatureSection
             step={1}
+            title="区域探索"
+            subtitle="左侧选择区域篇章，地图聚焦后点击底部按钮进入学习"
+            icon={LayoutGrid}
+          >
+            <WorldRegionPanel
+              selectedId={selectedRegionId}
+              onSelect={setSelectedRegionId}
+              layerMode={layerMode}
+              layerLabel={activeLayerLabel}
+            />
+          </MapFeatureSection>
+
+          <MapFeatureSection
+            step={2}
             title="地图图层"
             subtitle="选择一种视图，地图将以对应维度展示信息"
             icon={Layers}
@@ -43,23 +57,6 @@ export function WorldMapLayout() {
               onLayerModeChange={setLayerMode}
             />
             <MapPuzzleEntry label="开始世界地图拼图" mode="world" />
-          </MapFeatureSection>
-
-          <MapFeatureSection
-            step={2}
-            title="区域探索"
-            subtitle="左侧选择区域篇章，地图聚焦后点击底部按钮进入学习"
-            icon={LayoutGrid}
-          >
-            <p className="mb-6 text-sm text-muted-foreground">
-              点击篇章后地图会聚焦，再通过底部按钮进入。知识点内容将在教师后台录入后显示。
-            </p>
-            <WorldRegionPanel
-              selectedId={selectedRegionId}
-              onSelect={setSelectedRegionId}
-              layerMode={layerMode}
-              layerLabel={activeLayerLabel}
-            />
           </MapFeatureSection>
         </div>
       </div>

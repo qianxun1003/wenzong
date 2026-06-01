@@ -73,7 +73,7 @@ export function MapPuzzleGame() {
   const [finished, setFinished] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [questionTimes, setQuestionTimes] = useState<number[]>([]);
-  const [questionStart, setQuestionStart] = useState(Date.now());
+  const [questionStart, setQuestionStart] = useState(() => new Date().getTime());
 
   const current = questions[currentIndex];
   const highlightedId = current?.id ?? null;
@@ -94,13 +94,13 @@ export function MapPuzzleGame() {
     setFinished(false);
     setElapsed(0);
     setQuestionTimes([]);
-    setQuestionStart(Date.now());
+    setQuestionStart(new Date().getTime());
   }, []);
 
   const handleAnswer = (optionIndex: number) => {
     if (showResult || !current) return;
 
-    const timeTaken = (Date.now() - questionStart) / 1000;
+    const timeTaken = (new Date().getTime() - questionStart) / 1000;
     setQuestionTimes((prev) => [...prev, timeTaken]);
     setSelectedOption(optionIndex);
     setShowResult(true);
@@ -122,7 +122,7 @@ export function MapPuzzleGame() {
       setCurrentIndex((i) => i + 1);
       setSelectedOption(null);
       setShowResult(false);
-      setQuestionStart(Date.now());
+      setQuestionStart(new Date().getTime());
     }, 900);
   };
 

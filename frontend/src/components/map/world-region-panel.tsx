@@ -58,6 +58,7 @@ export function WorldRegionPanel({ selectedId, onSelect, layerMode, layerLabel }
                 layerMode={layerMode}
                 selectedRegionId={selectedId}
                 onSelect={(id) => handleRegionSelect(id as WorldRegionId)}
+                fitPadding={18}
                 ariaLabel="世界区域地图"
                 className="h-full max-h-full w-full max-w-full"
               />

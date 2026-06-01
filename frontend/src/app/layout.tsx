@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { AppMain } from "@/components/layout/app-main";
+import { BottomNav } from "@/components/layout/bottom-nav";
+import { ScrollToTopOnNavigate } from "@/components/layout/scroll-to-top-on-navigate";
 import { SiteHeader } from "@/components/layout/site-header";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "文综学习平台",
-  description: "EJU 文综一站式学习 · AI 智能导师 + 地图探索学习",
+  description: "EJU 文综一站式学习 · AI 智能导师 + 地图探索 + Quiz 练习",
 };
 
 export default function RootLayout({
@@ -17,7 +20,9 @@ export default function RootLayout({
     <html lang="zh-CN" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-background">
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <ScrollToTopOnNavigate />
+        <AppMain>{children}</AppMain>
+        <BottomNav />
         <Toaster position="top-center" richColors />
       </body>
     </html>

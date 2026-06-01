@@ -22,20 +22,20 @@ export default async function JapanRegionPage({ params }: JapanRegionPageProps) 
 
   return (
     <MapPageShell>
-      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
-        <BackToMapHubLink className="mb-6 -ml-2" />
+      <div className="map-hub-content mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+        <BackToMapHubLink className="mb-4 -ml-2" />
         <Link
           href="/map/japan"
-          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-4 gap-1.5 text-muted-foreground")}
+          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-3 gap-1.5 text-muted-foreground")}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-3.5 w-3.5" />
           返回日本地图
         </Link>
 
-        <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">{region.name}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{region.subtitle}</p>
+        <h1 className="map-page-title__heading">{region.name}</h1>
+        <p className="map-page-title__lead mt-1">{region.subtitle}</p>
 
-        <div className="mt-8">
+        <div className="mt-6">
           <JapanRegionDetailView region={region} />
         </div>
       </div>

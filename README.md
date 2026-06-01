@@ -24,10 +24,12 @@
 
 **请按 [`docs/SUPABASE_SETUP.md`](docs/SUPABASE_SETUP.md) 逐步操作**，包含数据库 SQL、密钥配置与联调测试。
 
-## 生产部署（Render + Vercel）
+## 生产部署（Render）
 
-后端 → [Render](https://render.com)，前端 → [Vercel](https://vercel.com)，数据库继续用 Supabase。  
-逐步说明见 **[`docs/DEPLOY_RENDER_VERCEL.md`](docs/DEPLOY_RENDER_VERCEL.md)**。
+前后端均部署在 [Render](https://render.com)，数据库继续用 Supabase。  
+逐步说明见 **[`docs/DEPLOY_RENDER.md`](docs/DEPLOY_RENDER.md)**（仓库根目录 [`render.yaml`](render.yaml) 可 Blueprint 一键创建两个服务）。
+
+若前端改用 Vercel，见 [`docs/DEPLOY_RENDER_VERCEL.md`](docs/DEPLOY_RENDER_VERCEL.md)。
 
 ## 快速启动
 

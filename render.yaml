@@ -1,9 +1,11 @@
 # Render Blueprint：前后端均部署在 Render
-# Dashboard → New → Blueprint 选择本仓库；或分别手动创建两个 Web Service
+# Dashboard → New → Blueprint → 选 GitHub 仓库 qianxun1003/wenzong
+# 详细步骤见 docs/DEPLOY_RENDER.md
 services:
   - type: web
     name: wenzong-api
     runtime: python
+    plan: free
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
@@ -11,6 +13,16 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.7
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
       - key: CORS_ORIGINS
         fromService:
           type: web
@@ -20,6 +32,7 @@ services:
   - type: web
     name: wenzong-web
     runtime: node
+    plan: free
     rootDir: frontend
     buildCommand: npm ci && npm run build
     startCommand: npm run start

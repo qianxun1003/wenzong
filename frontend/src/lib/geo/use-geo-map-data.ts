@@ -15,11 +15,7 @@ export function useGeoMapData(kind: MapKind) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (cache.has(kind)) {
-      setFeatures(cache.get(kind)!);
-      setLoading(false);
-      return;
-    }
+    if (cache.has(kind)) return;
 
     let cancelled = false;
 

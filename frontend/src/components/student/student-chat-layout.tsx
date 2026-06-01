@@ -80,11 +80,13 @@ function StudentChatLayoutInner() {
   const [storageReady, setStorageReady] = useState(false);
 
   useEffect(() => {
-    const { sessions: s, activeId, messages: m } = initState();
-    setSessions(s);
-    setActiveSessionId(activeId);
-    setMessages(m);
-    setStorageReady(true);
+    queueMicrotask(() => {
+      const { sessions: s, activeId, messages: m } = initState();
+      setSessions(s);
+      setActiveSessionId(activeId);
+      setMessages(m);
+      setStorageReady(true);
+    });
 
     checkBackendHealth()
       .then((h) => setBackendOk(h.status === "ok"))

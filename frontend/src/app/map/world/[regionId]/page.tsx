@@ -35,7 +35,7 @@ export default async function WorldRegionPage({ params }: WorldRegionPageProps) 
             <ArrowLeft className="h-3.5 w-3.5" />
             世界地图
           </Link>
-          <span className="text-sm font-medium text-foreground">{region.name}</span>
+          <span className="text-xs font-medium text-foreground sm:text-sm">{region.name}</span>
         </div>
 
         <WorldRegionDetailView region={region} />

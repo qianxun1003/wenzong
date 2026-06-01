@@ -128,7 +128,9 @@ export function KnowledgeListPanel({ refreshKey = 0 }: KnowledgeListPanelProps) 
   }, []);
 
   useEffect(() => {
-    load(query);
+    queueMicrotask(() => {
+      void load(query);
+    });
   }, [load, query, refreshKey]);
 
   const handleSearch = (e: React.FormEvent) => {

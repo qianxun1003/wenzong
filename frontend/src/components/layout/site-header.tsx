@@ -3,15 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Globe2, GraduationCap, Menu } from "lucide-react";
+import { BookOpen, ClipboardList, Globe2, GraduationCap, Menu } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { BackToHomeLink } from "@/components/layout/back-to-home-link";
 import { cn } from "@/lib/utils";
 
+/** 顶栏：各功能入口；个人主页在底栏 */
 const navItems = [
-  { href: "/student", label: "文综导师", icon: GraduationCap },
+  { href: "/student", label: "AI 导师", icon: GraduationCap },
   { href: "/map", label: "地图探索", icon: Globe2 },
+  { href: "/quiz", label: "Quiz 练习", icon: ClipboardList },
   { href: "/teacher", label: "教师后台", icon: BookOpen },
 ];
 

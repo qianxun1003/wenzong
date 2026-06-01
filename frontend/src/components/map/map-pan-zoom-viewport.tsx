@@ -45,8 +45,11 @@ export function MapPanZoomViewport({
   const containerRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState<Transform>(DEFAULT_TRANSFORM);
   const [isDragging, setIsDragging] = useState(false);
+  const [isPinching, setIsPinching] = useState(false);
   const transformRef = useRef(transform);
-  transformRef.current = transform;
+  useEffect(() => {
+    transformRef.current = transform;
+  }, [transform]);
 
   const dragRef = useRef<{
     pointerId: number;
@@ -75,7 +78,8 @@ export function MapPanZoomViewport({
   }, []);
 
   useEffect(() => {
-    resetTransform();
+    const raf = window.requestAnimationFrame(() => resetTransform());
+    return () => window.cancelAnimationFrame(raf);
   }, [resetKey, resetTransform]);
 
   const handleWheel = useCallback(
@@ -191,6 +195,7 @@ export function MapPanZoomViewport({
       centerX,
       centerY,
     };
+    setIsPinching(true);
   };
 
   const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
@@ -213,6 +218,7 @@ export function MapPanZoomViewport({
 
   const handleTouchEnd = () => {
     pinchRef.current = null;
+    setIsPinching(false);
     window.setTimeout(() => {
       suppressClickRef.current = false;
     }, 0);
@@ -239,7 +245,7 @@ export function MapPanZoomViewport({
         )}
         style={{
           transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})`,
-          transition: isDragging || pinchRef.current ? "none" : "transform 0.35s ease-out",
+          transition: isDragging || isPinching ? "none" : "transform 0.35s ease-out",
         }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

@@ -19,20 +19,34 @@ export function JapanMapLayout() {
 
   return (
     <MapPageShell>
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <BackToMapHubLink className="mb-6 -ml-2" />
+      <div className="map-hub-content mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+        <BackToMapHubLink className="mb-4 -ml-2" />
 
         <MapPageTitle
           variant="japan"
           title="日本地图"
           subtitle="八大地方区分 · 都道府县 · 拼图记忆"
           icon={MapPinned}
-          className="mb-10"
+          className="mb-7"
         />
 
-        <div className="space-y-8">
+        <div className="space-y-6">
           <MapFeatureSection
             step={1}
+            title="区域探索"
+            subtitle="左侧选择地方或都道府县，地图将聚焦到对应位置"
+            icon={LayoutGrid}
+          >
+            <JapanRegionPanel
+              selectedId={selectedRegionId}
+              onSelect={setSelectedRegionId}
+              layerMode={layerMode}
+              layerLabel={activeLayerLabel}
+            />
+          </MapFeatureSection>
+
+          <MapFeatureSection
+            step={2}
             title="地图图层"
             subtitle="选择一种视图，地图将以对应维度展示信息"
             icon={Layers}
@@ -43,23 +57,6 @@ export function JapanMapLayout() {
               onLayerModeChange={setLayerMode}
             />
             <MapPuzzleEntry label="开始日本地图拼图" mode="japan" />
-          </MapFeatureSection>
-
-          <MapFeatureSection
-            step={2}
-            title="区域探索"
-            subtitle="左侧选择地方或都道府县，地图将聚焦到对应位置"
-            icon={LayoutGrid}
-          >
-            <p className="mb-6 text-sm text-muted-foreground">
-              左侧选择地方或都道府县，地图将聚焦到对应位置。知识点内容将在教师后台录入后显示。
-            </p>
-            <JapanRegionPanel
-              selectedId={selectedRegionId}
-              onSelect={setSelectedRegionId}
-              layerMode={layerMode}
-              layerLabel={activeLayerLabel}
-            />
           </MapFeatureSection>
         </div>
       </div>

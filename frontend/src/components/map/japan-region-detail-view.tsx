@@ -70,7 +70,6 @@ export function JapanRegionDetailView({ region, initialPrefectureCn }: JapanRegi
           selectedId={activeSidebarId}
           onSelect={handleSidebarSelect}
           searchPlaceholder="搜索都道府县…"
-          hint="可滚动或搜索"
           className="map-explorer-sidebar map-explorer-sidebar-japan"
         />
 

@@ -3,7 +3,12 @@
 import { useMemo, useState } from "react";
 import type { Feature, Geometry } from "geojson";
 import { geoCentroid } from "d3-geo";
-import { buildProjection, createPathGenerator } from "@/lib/geo/projection";
+import {
+  buildProjection,
+  createPathGenerator,
+  type FitAnchor,
+  type FitPadding,
+} from "@/lib/geo/projection";
 import { getJapanRegionId } from "@/lib/geo/japan-region-by-prefecture";
 import { prefectureDisplayName } from "@/lib/geo/japan-prefecture-names";
 import { getCnCountryName, getGeoCountryName } from "@/lib/geo/world-country-names";
@@ -30,8 +35,10 @@ interface GeoMapCanvasProps {
   onCountrySelect?: (cnName: string) => void;
   interactive?: boolean;
   fitToSelection?: boolean;
-  fitPadding?: number;
+  fitPadding?: FitPadding;
   fitScale?: number;
+  /** 轮廓在画布内的锚点（预览区用右下角区域居中） */
+  fitAnchor?: FitAnchor;
   preserveAspect?: "meet" | "slice";
   showLabels?: boolean;
   className?: string;
@@ -70,6 +77,7 @@ export function GeoMapCanvas({
   fitToSelection = true,
   fitPadding,
   fitScale = 1,
+  fitAnchor = "center",
   preserveAspect = "meet",
   showLabels = true,
   className,
@@ -81,8 +89,29 @@ export function GeoMapCanvas({
   const { features, loading, error } = useGeoMapData(kind);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const width = kind === "world" ? (isCountryMode ? 960 : 800) : 400;
-  const height = kind === "world" ? (isCountryMode ? 720 : 400) : 500;
+  /** 探索页右侧预览：横向画布 + 居中 fit，与宽面板比例接近 */
+  const isHubOverview =
+    fitAnchor === "center" &&
+    !isPrefectureMode &&
+    !isCountryMode &&
+    (!fitToSelection || (kind === "japan" && !selectedRegionId));
+
+  const width =
+    kind === "world"
+      ? isCountryMode
+        ? 960
+        : 800
+      : isHubOverview
+        ? 560
+        : 400;
+  const height =
+    kind === "world"
+      ? isCountryMode
+        ? 720
+        : 400
+      : isHubOverview
+        ? 400
+        : 500;
 
   const renderFeatures = useMemo(() => {
     if (isPrefectureMode) {
@@ -155,7 +184,8 @@ export function GeoMapCanvas({
       height,
       kind,
       padding,
-      fitScale
+      fitScale,
+      fitAnchor
     );
   }, [
     projectionFeatures,
@@ -167,8 +197,10 @@ export function GeoMapCanvas({
     isPrefectureMode,
     isCountryMode,
     selectedCountryName,
+    selectedPrefectureJa,
     fitPadding,
     fitScale,
+    fitAnchor,
   ]);
 
   const pathGenerator = useMemo(

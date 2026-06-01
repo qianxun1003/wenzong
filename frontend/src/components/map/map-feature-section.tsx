@@ -25,17 +25,20 @@ export function MapFeatureSection({
       aria-labelledby={`map-feature-heading-${step}`}
     >
       <div className="map-feature-panel-head">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-sm font-bold text-primary">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xs font-semibold text-primary">
           {step}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <Icon className="h-4 w-4 shrink-0 text-primary" />
-            <h2 id={`map-feature-heading-${step}`} className="text-lg font-semibold text-foreground sm:text-xl">
+          <div className="flex items-center gap-1.5">
+            <Icon className="h-3.5 w-3.5 shrink-0 text-primary/80" />
+            <h2
+              id={`map-feature-heading-${step}`}
+              className="text-sm font-semibold tracking-tight text-foreground sm:text-base"
+            >
               {title}
             </h2>
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{subtitle}</p>
         </div>
       </div>
       <div className="map-feature-panel-body">{children}</div>

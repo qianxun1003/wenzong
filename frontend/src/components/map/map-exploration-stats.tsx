@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BookOpen, CheckCircle2, Compass, Sparkles } from "lucide-react";
 import { getMapProgress } from "@/lib/map-progress";
 
@@ -17,11 +17,7 @@ export function MapExplorationStats({
   totalKnowledgePoints,
   label = "探索进度",
 }: MapExplorationStatsProps) {
-  const [completedPoints, setCompletedPoints] = useState(0);
-
-  useEffect(() => {
-    setCompletedPoints(getMapProgress().completedExamPoints.length);
-  }, []);
+  const [completedPoints] = useState(() => getMapProgress().completedExamPoints.length);
 
   const explored = exploredSlugs.length;
   const percent = totalItems > 0 ? Math.round((explored / totalItems) * 100) : 0;

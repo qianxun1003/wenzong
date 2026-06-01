@@ -41,13 +41,6 @@ export function JapanRegionPanel({ selectedId, onSelect, layerMode, layerLabel }
     return buildJapanPrefectureSidebarItemsForRegion(selectedId);
   }, [browseMode, selectedId]);
 
-  const sidebarHint =
-    browseMode === "region"
-      ? "八大地方区分 · 快速定位区域"
-      : selectedId
-        ? `${selectedRegion?.name ?? ""} · ${sidebarItems.length} 个都道府县`
-        : "请先在地图或侧栏选择地方区分";
-
   const activeSidebarId =
     browseMode === "region"
       ? selectedId
@@ -79,9 +72,21 @@ export function JapanRegionPanel({ selectedId, onSelect, layerMode, layerLabel }
     setSidebarSelectionId(null);
   };
 
+  const handleBrowseModePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
+  const handleBrowseModeClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    mode: JapanBrowseMode
+  ) => {
+    handleBrowseModeChange(mode);
+    e.currentTarget.focus({ preventScroll: true });
+  };
+
   return (
     <div className="map-explorer-panel map-sub-panel">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 bg-background/50 px-4 py-3 sm:px-5">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 bg-background/50 px-3 py-2 sm:px-4">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-foreground">区域探索</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
@@ -102,7 +107,8 @@ export function JapanRegionPanel({ selectedId, onSelect, layerMode, layerLabel }
               type="button"
               role="tab"
               aria-selected={browseMode === "region"}
-              onClick={() => handleBrowseModeChange("region")}
+              onPointerDown={handleBrowseModePointerDown}
+              onClick={(e) => handleBrowseModeClick(e, "region")}
               className={cn(browseMode === "region" && "map-explorer-mode-toggle-active")}
             >
               地方区分
@@ -111,7 +117,8 @@ export function JapanRegionPanel({ selectedId, onSelect, layerMode, layerLabel }
               type="button"
               role="tab"
               aria-selected={browseMode === "prefecture"}
-              onClick={() => handleBrowseModeChange("prefecture")}
+              onPointerDown={handleBrowseModePointerDown}
+              onClick={(e) => handleBrowseModeClick(e, "prefecture")}
               className={cn(browseMode === "prefecture" && "map-explorer-mode-toggle-active")}
             >
               都道府县
@@ -129,7 +136,6 @@ export function JapanRegionPanel({ selectedId, onSelect, layerMode, layerLabel }
           selectedId={activeSidebarId}
           onSelect={handleSidebarSelect}
           searchPlaceholder={browseMode === "region" ? "搜索地方区分…" : "搜索都道府县…"}
-          hint={sidebarHint}
           emptyMessage={
             browseMode === "prefecture" && !selectedId
               ? "请先在地图或「地方区分」中选择区域"
@@ -150,6 +156,7 @@ export function JapanRegionPanel({ selectedId, onSelect, layerMode, layerLabel }
                 selectedRegionId={selectedId}
                 onSelect={(id) => handleMapSelect(id as JapanRegionId)}
                 fitToSelection={false}
+                fitPadding={20}
                 showLabels={false}
                 ariaLabel="日本都道府县地图"
                 className="h-full w-full"

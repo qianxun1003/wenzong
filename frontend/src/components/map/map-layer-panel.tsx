@@ -53,7 +53,6 @@ export function MapLayerPanel({ kind, layerMode, onLayerModeChange }: MapLayerPa
           selectedId={layerMode}
           onSelect={(id) => onLayerModeChange(id as MapLayerMode)}
           searchPlaceholder="搜索图层维度…"
-          hint="选择一种视图，地图将以对应维度展示"
           compact={!isJapan}
           className={cn(
             "map-explorer-sidebar",
@@ -70,6 +69,7 @@ export function MapLayerPanel({ kind, layerMode, onLayerModeChange }: MapLayerPa
                 selectedRegionId={null}
                 interactive={false}
                 fitToSelection={false}
+                fitPadding={20}
                 showLabels={false}
                 ariaLabel={`${activeLayer?.label ?? "地图"}预览`}
                 className="h-full w-full"
@@ -84,6 +84,7 @@ export function MapLayerPanel({ kind, layerMode, onLayerModeChange }: MapLayerPa
                 layerMode={layerMode}
                 selectedRegionId={null}
                 interactive={false}
+                fitPadding={18}
                 ariaLabel={`${activeLayer?.label ?? "地图"}预览`}
                 className="h-full max-h-full w-full max-w-full"
               />
