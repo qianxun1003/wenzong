@@ -4,6 +4,7 @@ import { useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Flame, MapPin, Target, Timer } from "lucide-react";
 import { GrowthMiniMap } from "@/components/growth/growth-mini-map";
+import { MapPageShell } from "@/components/map/map-page-shell";
 import {
   GROWTH_MILESTONES,
   SUBJECT_ABILITY_PREVIEW,
@@ -46,8 +47,9 @@ export function GrowthPage() {
       : "—";
 
   return (
-    <div className="growth-page">
-      <div className="growth-page__inner">
+    <MapPageShell className="flex flex-1 flex-col">
+      <div className="growth-page">
+        <div className="growth-page__inner">
         {/* I · 概要 */}
         <section className="growth-section" aria-labelledby="growth-profile-heading">
           <div className="growth-profile">
@@ -225,8 +227,9 @@ export function GrowthPage() {
             })}
           </ol>
         </section>
+        </div>
       </div>
-    </div>
+    </MapPageShell>
   );
 }
 

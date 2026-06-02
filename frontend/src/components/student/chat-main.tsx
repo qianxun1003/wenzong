@@ -72,11 +72,11 @@ export function ChatMain({
 
   if (!userHasSent) {
     return (
-      <div className={cn("chat-ambient", themeClass)}>
-        <div className="hero-scroll-area">
-          <div className="hero-scroll-inner">
+      <div className={cn("chat-ambient chat-ambient--hero", themeClass)}>
+        <div className="hero-compose-stage">
+          <div className="hero-compose-anchor">
             {fromMap && wasPrefilled && (
-              <div className="welcome-banner mb-4 text-xs text-muted-foreground">
+              <div className="welcome-banner mb-4 shrink-0 text-xs text-muted-foreground">
                 来自地图探索 · 已预填考点问题，选择模式后即可发送
               </div>
             )}

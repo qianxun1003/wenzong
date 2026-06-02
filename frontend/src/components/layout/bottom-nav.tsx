@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, UserRound } from "lucide-react";
+import { shouldShowBottomNav } from "@/lib/bottom-nav-visibility";
 import { cn } from "@/lib/utils";
 
 const BOTTOM_NAV_ITEMS = [
@@ -10,12 +11,10 @@ const BOTTOM_NAV_ITEMS = [
   { href: "/me", label: "个人主页", icon: UserRound, match: (p: string) => p.startsWith("/me") },
 ] as const;
 
-const HIDDEN_PREFIXES = ["/teacher"];
-
 export function BottomNav() {
   const pathname = usePathname();
 
-  if (HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+  if (!shouldShowBottomNav(pathname)) {
     return null;
   }
 

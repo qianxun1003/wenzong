@@ -20,17 +20,21 @@ export function HomeFloatCard({
   return (
     <Link href={href} className="map-float-card home-float-card" aria-label={`进入${title}`}>
       <span className="map-float-card__glow" aria-hidden />
-      <div
-        className={cn(
-          "home-float-card__icon-wrap flex h-14 w-14 items-center justify-center rounded-2xl text-primary-foreground shadow-md sm:h-[3.75rem] sm:w-[3.75rem]",
-          accentClass
-        )}
-        aria-hidden
-      >
-        <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.75} />
+      <div className="home-float-card__body">
+        <div
+          className={cn(
+            "home-float-card__icon-wrap flex shrink-0 items-center justify-center rounded-2xl text-primary-foreground",
+            accentClass
+          )}
+          aria-hidden
+        >
+          <Icon className="home-float-card__icon" strokeWidth={1.75} />
+        </div>
+        <div className="home-float-card__copy">
+          <h2 className="home-float-card__title">{title}</h2>
+          <p className="home-float-card__subtitle">{subtitle}</p>
+        </div>
       </div>
-      <h2 className="map-float-card__title">{title}</h2>
-      <p className="map-float-card__subtitle">{subtitle}</p>
     </Link>
   );
 }

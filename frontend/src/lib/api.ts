@@ -4,6 +4,7 @@ import type {
   ChatMessage,
   KnowledgeEntry,
   KnowledgeListResponse,
+  PopularQuestionsResponse,
   UploadResult,
 } from "./types";
 
@@ -68,6 +69,13 @@ export async function sendChatMessage(
     method: "POST",
     body: JSON.stringify({ message, session_id: sessionId, answer_mode: answerMode }),
   });
+}
+
+export async function fetchPopularQuestions(
+  limit = 30
+): Promise<PopularQuestionsResponse> {
+  const params = new URLSearchParams({ limit: String(limit) });
+  return request(`/api/chat/popular-questions?${params}`);
 }
 
 export async function uploadDocuments(files: File[]): Promise<UploadResult[]> {

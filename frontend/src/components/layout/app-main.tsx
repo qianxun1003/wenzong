@@ -1,13 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { shouldShowBottomNav } from "@/lib/bottom-nav-visibility";
 import { cn } from "@/lib/utils";
-
-const BOTTOM_NAV_HIDDEN = ["/teacher"];
 
 export function AppMain({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const showBottomNav = !BOTTOM_NAV_HIDDEN.some((p) => pathname.startsWith(p));
+  const showBottomNav = shouldShowBottomNav(pathname);
 
   return (
     <main

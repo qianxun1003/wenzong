@@ -248,17 +248,17 @@ function StudentChatLayoutInner() {
         </Sheet>
 
         <div className="student-chat-pane flex min-w-0 flex-1 flex-col">
-          <div className="student-chat-topbar flex items-center gap-2.5 lg:hidden">
+          <div className="student-chat-topbar flex shrink-0 items-center gap-2 px-3 py-2 lg:hidden">
             <Button
               variant="ghost"
               size="icon"
               className="h-8 w-8"
               onClick={() => setSidebarOpen(true)}
-              aria-label="打开历史记录"
+              aria-label="打开对话历史与工具"
             >
               <PanelLeft className="h-4 w-4" />
             </Button>
-            <span className="text-sm font-medium">文综小助手</span>
+            <span className="truncate text-sm font-medium">文综 AI 导师</span>
           </div>
 
           <div className="min-h-0 flex-1 overflow-hidden">

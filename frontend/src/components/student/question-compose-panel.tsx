@@ -42,33 +42,24 @@ export function QuestionComposePanel({
   if (!hero) {
     return (
       <div className="glass-compose-panel glass-compose-panel--inline">
-        <div className="flex items-end gap-2">
-          <div className="glass-input-wrap glass-input-wrap--inline min-w-0 flex-1">
-            <Textarea
-              value={input}
-              onChange={(e) => onInputChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="继续提问…"
-              className="glass-input-field min-h-[40px] max-h-24 resize-none border-0 bg-transparent py-1 text-sm shadow-none focus-visible:ring-0"
-              rows={1}
-              disabled={isLoading}
-            />
-          </div>
-          <Button
-            onClick={onSubmit}
-            disabled={!canSubmit}
-            size="icon"
-            aria-label="发送"
-            className="glass-submit-btn h-10 w-10 shrink-0 rounded-full border-0"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <ArrowRight className="h-4 w-4" />
-            )}
-          </Button>
+        <div className="glass-input-wrap glass-input-wrap--inline glass-input-wrap--with-send">
+          <Textarea
+            value={input}
+            onChange={(e) => onInputChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="继续提问…"
+            className="glass-input-field min-h-[40px] max-h-24 min-w-0 flex-1 resize-none border-0 bg-transparent py-1 text-sm shadow-none focus-visible:ring-0"
+            rows={1}
+            disabled={isLoading}
+          />
+          <ComposeSendButton
+            canSubmit={canSubmit}
+            isLoading={isLoading}
+            onSubmit={onSubmit}
+            compact
+          />
         </div>
-        <div className="mt-2.5">
+        <div className="compose-mode-zone compose-mode-zone--inline mt-2.5">
           <ModeSelectorPills
             selected={selectedMode}
             onSelect={onModeSelect}
@@ -90,20 +81,25 @@ export function QuestionComposePanel({
           有什么文综问题？
         </h1>
         <p className="mt-2 text-sm text-[var(--ui-ink-muted)]">
-          先写下你的问题，再选一种模式，一起发送
+          写下问题、选择模式后，在输入框旁点击发送
         </p>
       </div>
 
-      <section aria-label="输入问题">
-        <div className="glass-input-wrap">
+      <section aria-label="输入问题" className="compose-zone-input">
+        <div className="glass-input-wrap glass-input-wrap--with-send glass-input-wrap--hero-send">
           <Textarea
             value={input}
             onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="输入你的问题，例如：日本高度经济成长期是什么？"
-            className="glass-input-field min-h-[112px] resize-none border-0 bg-transparent text-base shadow-none focus-visible:ring-0 sm:min-h-[128px]"
+            className="glass-input-field min-h-[112px] min-w-0 flex-1 resize-none border-0 bg-transparent text-base shadow-none focus-visible:ring-0 sm:min-h-[128px]"
             rows={4}
             disabled={isLoading}
+          />
+          <ComposeSendButton
+            canSubmit={canSubmit}
+            isLoading={isLoading}
+            onSubmit={onSubmit}
           />
         </div>
 
@@ -128,14 +124,20 @@ export function QuestionComposePanel({
 
       <hr className="compose-zone-divider" />
 
-      <section aria-label="选择回答模式">
+      <section
+        aria-label="选择回答模式"
+        className={cn(
+          "compose-zone-modes compose-mode-zone",
+          !hasQuestion && "compose-mode-zone--idle"
+        )}
+      >
         <p className="compose-zone-label">
           {hasQuestion ? "选择回答模式" : "输入问题后，选择一种回答模式"}
         </p>
         <div
           className={cn(
-            "transition-all duration-500",
-            hasQuestion ? "opacity-100 translate-y-0" : "opacity-60 translate-y-0.5"
+            "mode-selector-grid-wrap transition-opacity duration-300",
+            hasQuestion ? "opacity-100" : "opacity-65"
           )}
         >
           <ModeSelectorCards
@@ -145,28 +147,39 @@ export function QuestionComposePanel({
           />
         </div>
       </section>
+    </div>
+  );
+}
 
-      <hr className="compose-zone-divider" />
-
-      <section aria-label="发送" className="compose-zone-actions justify-end">
-        <Button
-          onClick={onSubmit}
-          disabled={!canSubmit}
-          className="glass-submit-btn h-11 shrink-0 gap-2 rounded-full border-0 px-5"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              正在回答…
-            </>
-          ) : (
-            <>
-              发送
-              <ArrowRight className="h-4 w-4" />
-            </>
-          )}
-        </Button>
-      </section>
+function ComposeSendButton({
+  canSubmit,
+  isLoading,
+  onSubmit,
+  compact = false,
+}: {
+  canSubmit: boolean;
+  isLoading?: boolean;
+  onSubmit: () => void;
+  compact?: boolean;
+}) {
+  return (
+    <div className="glass-send-slot">
+      <Button
+        type="button"
+        onClick={onSubmit}
+        disabled={!canSubmit}
+        aria-label={isLoading ? "正在回答" : "发送"}
+        className={cn(
+          "glass-submit-btn rounded-full border-0 p-0",
+          compact ? "size-10" : "size-11"
+        )}
+      >
+        {isLoading ? (
+          <Loader2 className="size-4 shrink-0 animate-spin" />
+        ) : (
+          <ArrowRight className="glass-send-icon size-4 shrink-0" strokeWidth={2} />
+        )}
+      </Button>
     </div>
   );
 }

@@ -99,3 +99,19 @@ export interface ChatApiResponse {
   rag_used: boolean;
   session_id: string;
 }
+
+export interface PopularQuestionItem {
+  id: string;
+  question_display: string;
+  ask_count: number;
+  last_answer_mode: AnswerMode;
+  last_reply: string;
+  last_sections: AnswerSection[];
+  last_citations: Citation[];
+  last_asked_at: string;
+}
+
+export interface PopularQuestionsResponse {
+  items: PopularQuestionItem[];
+  updated_at: string;
+}
