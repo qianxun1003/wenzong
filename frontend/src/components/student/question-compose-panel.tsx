@@ -30,7 +30,7 @@ export function QuestionComposePanel({
   suggestions = [],
 }: QuestionComposePanelProps) {
   const hasQuestion = input.trim().length > 0;
-  const canSubmit = hasQuestion && selectedMode && !isLoading;
+  const canSubmit = hasQuestion && selectedMode != null && !isLoading;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey && canSubmit) {
