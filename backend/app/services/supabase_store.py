@@ -1,12 +1,6 @@
-from supabase import create_client, Client
+from app.db.client import get_supabase
 
-from app.config import settings
-
-
-def get_supabase() -> Client:
-    if not settings.supabase_url or not settings.supabase_service_key:
-        raise RuntimeError("请配置 SUPABASE_URL 和 SUPABASE_SERVICE_KEY")
-    return create_client(settings.supabase_url, settings.supabase_service_key)
+__all__ = ["get_supabase", "embed_inputs_for_chunks", "store_chunks", "search_similar"]
 
 
 def embed_inputs_for_chunks(chunks: list[str], metadata: dict) -> list[str]:
@@ -63,7 +57,7 @@ async def search_by_keywords(query: str, limit: int = 5) -> list[dict]:
     if rows:
         return [{**r, "similarity": 1.0} for r in rows]
 
-    # 拆词后再试（支持中文自然问句，如「日本高度经济成长是什么时候」）
+    # 拆词后再试（支持中文自然问句，如「罗斯福新政的五法一政一制度是什么」）
     for token in sorted(_tokens(q), key=len, reverse=True):
         if len(token) < 2:
             continue

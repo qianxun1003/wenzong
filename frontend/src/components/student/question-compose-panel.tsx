@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ModeSelectorCards } from "./mode-selector-cards";
 import { ModeSelectorPills } from "./mode-selector-pills";
 import { cn } from "@/lib/utils";
+import { EJU_CHAT_PLACEHOLDER } from "@/lib/eju-syllabus";
 import type { AnswerMode } from "@/lib/types";
 
 interface QuestionComposePanelProps {
@@ -91,7 +92,7 @@ export function QuestionComposePanel({
             value={input}
             onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="输入你的问题，例如：日本高度经济成长期是什么？"
+            placeholder={EJU_CHAT_PLACEHOLDER}
             className="glass-input-field min-h-[112px] min-w-0 flex-1 resize-none border-0 bg-transparent text-base shadow-none focus-visible:ring-0 sm:min-h-[128px]"
             rows={4}
             disabled={isLoading}

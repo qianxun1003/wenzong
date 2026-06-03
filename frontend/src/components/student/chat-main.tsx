@@ -8,6 +8,7 @@ import { QuestionComposePanel } from "./question-compose-panel";
 import { getModeShellClass } from "@/lib/mode-theme";
 import { getModeConfig } from "@/lib/mode-config";
 import { ANSWER_MODES, type AnswerMode, type ChatMessage } from "@/lib/types";
+import { EJU_CHAT_SUGGESTIONS } from "@/lib/eju-syllabus";
 import { cn } from "@/lib/utils";
 
 interface ChatMainProps {
@@ -23,11 +24,7 @@ function hasUserMessages(messages: ChatMessage[]) {
   return messages.some((m) => m.role === "user");
 }
 
-const DEFAULT_SUGGESTIONS = [
-  "日本高度经济成长是什么时候？",
-  "美国的政治体制是什么？",
-  "世界上的峡湾地貌的具体例子？",
-];
+const DEFAULT_SUGGESTIONS = [...EJU_CHAT_SUGGESTIONS];
 
 export function ChatMain({
   messages,

@@ -95,6 +95,7 @@
   --sidebar-accent-foreground: oklch(0.38 0.012 260);
   --sidebar-border: oklch(1 0 0 / 0.35);
   --sidebar-ring: oklch(0.72 0.04 320 / 0.35);
+  --bottom-nav-height: 2.75rem;
 }
 
 @layer base {
@@ -213,7 +214,11 @@
     color: oklch(0.46 0.014 260 / 0.82);
   }
 
-  /* 三卡 + 分隔线 + 今日概览：贴页面下半部，靠近底栏 */
+  /* 三卡 + 分隔线 + 今日学习任务：贴页面下半部，与底栏留出空隙 */
+  .home-entry-hub.map-entry-hub {
+    padding-bottom: calc(var(--bottom-nav-height) + 0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
   .home-map-shell .map-page-content {
     display: flex;
     min-height: 100%;
@@ -237,7 +242,7 @@
     flex-direction: column;
     align-items: stretch;
     margin-inline: auto;
-    gap: clamp(1.25rem, 3.2vh, 1.75rem);
+    gap: clamp(1rem, 2.6vh, 1.375rem);
   }
 
   .home-entry-hub__divider {
@@ -247,19 +252,24 @@
     border-top: 1px solid oklch(0.88 0.012 260 / 0.55);
   }
 
-  .home-user-snapshot {
+  .home-daily-tasks {
     width: 100%;
+    margin-bottom: 0.125rem;
     padding-inline: clamp(0.125rem, 1vw, 0.25rem);
   }
 
-  .home-user-snapshot__head {
+  .home-daily-tasks__head {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 0.75rem;
   }
 
-  .home-user-snapshot__title {
+  .home-daily-tasks__head-text {
+    min-width: 0;
+  }
+
+  .home-daily-tasks__title {
     margin: 0;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -267,63 +277,473 @@
     color: oklch(0.38 0.014 260);
   }
 
-  .home-user-snapshot__meta {
-    margin: 0;
-    font-size: 0.75rem;
-    color: oklch(0.5 0.012 260 / 0.78);
+  .home-daily-tasks__date {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0.125rem 0 0;
+    font-size: 0.625rem;
+    line-height: 1.3;
+    color: oklch(0.5 0.012 260 / 0.72);
   }
 
-  .home-user-snapshot__level {
-    margin-right: 0.375rem;
+  .home-daily-tasks__date-sep {
+    opacity: 0.45;
+  }
+
+  .home-daily-tasks__hall-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.32rem 0.55rem;
+    border: 1px solid oklch(0.88 0.008 260 / 0.45);
+    border-radius: 999px;
+    background: oklch(1 0 0 / 0.5);
+    font-size: 0.625rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    font-weight: 500;
+    line-height: 1.3;
+    color: oklch(0.42 0.012 260);
+    box-shadow: none;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.15s ease;
+    cursor: pointer;
+  }
+
+  .home-daily-tasks__hall-btn:hover {
+    background: oklch(1 0 0 / 0.72);
+    border-color: oklch(0.82 0.01 260 / 0.55);
+  }
+
+  .home-daily-tasks__hall-btn:active {
+    transform: scale(0.98);
+  }
+
+  .home-daily-tasks__hall-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .home-daily-tasks__planner {
+    margin: 0.4rem 0 0;
+    padding: 0.45rem 0.625rem 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid oklch(0.9 0.008 260 / 0.38);
+    background: oklch(1 0 0 / 0.36);
+    box-shadow: inset 2px 0 0 oklch(0.82 0.01 260 / 0.35);
+  }
+
+  .home-daily-tasks__block + .home-daily-tasks__block {
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    border-top: 1px dashed oklch(0.88 0.008 260 / 0.45);
+  }
+
+  .home-daily-tasks__block-label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin: 0 0 0.28rem;
+    font-size: 0.5625rem;
     font-weight: 600;
-    color: oklch(0.42 0.016 148);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: oklch(0.48 0.012 260 / 0.75);
   }
 
-  .home-user-snapshot__stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(0.5rem, 2vw, 0.75rem);
-    margin: clamp(0.625rem, 1.8vh, 0.75rem) 0 0;
+  .home-daily-tasks__track-icon {
+    width: 0.8rem;
+    height: 0.8rem;
+    color: oklch(0.52 0.01 260 / 0.7);
+  }
+
+  .home-daily-tasks__agenda {
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .home-user-snapshot__stat {
+  .home-daily-tasks__slot {
+    display: grid;
+    grid-template-columns: 2.2rem 0.75rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.28rem 0.35rem;
+    min-height: 1.125rem;
+    font-size: 0.6875rem;
+    line-height: 1.3;
+    color: oklch(0.34 0.014 260 / 0.9);
+  }
+
+  .home-daily-tasks__slot--ai {
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+  }
+
+  .home-daily-tasks__slot + .home-daily-tasks__slot {
+    margin-top: 0.28rem;
+  }
+
+  .home-daily-tasks__time {
+    padding-top: 0.05rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+    color: oklch(0.5 0.012 260 / 0.7);
+  }
+
+  .home-daily-tasks__time--tag {
+    font-size: 0.5625rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .home-daily-tasks__item-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .home-daily-tasks__check {
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: 0;
+    flex-shrink: 0;
+    color: oklch(0.58 0.01 260 / 0.5);
+  }
+
+  /* 琉璃磨砂 · 任务管理大厅 */
+  .home-tasks-console {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(0.75rem, 3vw, 1.5rem);
+    isolation: isolate;
+  }
+
+  .home-tasks-console__backdrop {
+    position: absolute;
+    inset: 0;
+    border: none;
+    background: oklch(0.98 0.005 85 / 0.9);
+    backdrop-filter: blur(40px) saturate(0.9);
+    -webkit-backdrop-filter: blur(40px) saturate(0.9);
+    cursor: pointer;
+  }
+
+  .home-tasks-console__glass {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 40rem);
+    max-height: min(92dvh, 44rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: clamp(1.25rem, 4vw, 1.75rem);
+    border-radius: 1.5rem;
+    border: 1px solid oklch(0.9 0.008 260 / 0.55);
+    background: oklch(0.995 0.004 260 / 0.96);
+    backdrop-filter: blur(20px) saturate(1.05);
+    -webkit-backdrop-filter: blur(20px) saturate(1.05);
+    box-shadow:
+      0 12px 40px -12px oklch(0.35 0.015 260 / 0.18),
+      inset 0 1px 0 oklch(1 0 0 / 0.9);
+  }
+
+  .home-tasks-console__close {
+    position: absolute;
+    top: 0.875rem;
+    right: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid oklch(1 0 0 / 0.5);
+    border-radius: 999px;
+    background: oklch(1 0 0 / 0.55);
+    color: oklch(0.45 0.014 260);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .home-tasks-console__close:hover {
+    background: oklch(1 0 0 / 0.82);
+  }
+
+  .home-tasks-console__header {
+    padding-right: 2rem;
+  }
+
+  .home-tasks-console__eyebrow {
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: oklch(0.52 0.01 260 / 0.65);
+  }
+
+  .home-tasks-console__title {
+    margin: 0.25rem 0 0;
+    font-size: clamp(1.125rem, 3.5vw, 1.375rem);
+    font-weight: 600;
+    color: oklch(0.26 0.014 260);
+  }
+
+  .home-tasks-console__progress {
+    margin: 0.35rem 0 0;
+    font-size: 0.6875rem;
+    color: oklch(0.5 0.012 260 / 0.75);
+  }
+
+  .home-tasks-console__complete {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.375rem;
-    border-radius: 0.75rem;
-    background: oklch(1 0 0 / 0.42);
+    gap: 0.2rem;
+    margin-top: 0.875rem;
+    padding: 0.875rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid oklch(0.9 0.02 85 / 0.5);
+    background: linear-gradient(
+      165deg,
+      oklch(0.99 0.02 85 / 0.92) 0%,
+      oklch(0.98 0.008 260 / 0.88) 100%
+    );
     text-align: center;
+    box-shadow: 0 4px 20px -8px oklch(0.45 0.02 260 / 0.12);
   }
 
-  .home-user-snapshot__stat-icon {
-    width: 0.875rem;
-    height: 0.875rem;
-    color: oklch(0.52 0.02 148 / 0.85);
+  .home-tasks-console__complete-emoji {
+    font-size: 1.75rem;
+    line-height: 1;
   }
 
-  .home-user-snapshot__stat-label {
+  .home-tasks-console__complete-title {
+    margin: 0.25rem 0 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: oklch(0.3 0.014 260);
+  }
+
+  .home-tasks-console__complete-sub {
+    margin: 0;
     font-size: 0.6875rem;
-    line-height: 1.35;
     color: oklch(0.5 0.012 260 / 0.72);
   }
 
-  .home-user-snapshot__stat-value {
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.3;
-    color: oklch(0.28 0.014 260);
+  .home-tasks-console__emoji {
+    display: inline-block;
+    font-size: 0.92em;
+    line-height: 1;
+    vertical-align: -0.05em;
   }
 
-  .home-user-snapshot__map-line {
-    margin: clamp(0.5rem, 1.4vh, 0.625rem) 0 0;
+  .home-tasks-console__emoji--mine {
+    margin-left: 0.3rem;
+    opacity: 0.88;
+  }
+
+  .home-tasks-console__emoji--ai {
+    margin-left: 0.3rem;
+    opacity: 0.9;
+  }
+
+  .home-tasks-console__dual {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+    margin-top: 0.875rem;
+  }
+
+  @media (min-width: 640px) {
+    .home-tasks-console__dual {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .home-tasks-console__zone {
+    padding: 0.875rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid oklch(0.9 0.008 260 / 0.4);
+    background: oklch(0.99 0.004 260 / 0.55);
+  }
+
+  .home-tasks-console__zone-hint {
+    margin: 0 0 0.625rem;
     font-size: 0.75rem;
     line-height: 1.45;
-    text-align: center;
-    color: oklch(0.5 0.012 260 / 0.75);
+    color: oklch(0.5 0.01 260 / 0.78);
+  }
+
+  .home-tasks-console__zone-title {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: oklch(0.34 0.014 260);
+  }
+
+  .home-tasks-console__check-btn {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: oklch(0.58 0.01 260 / 0.55);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .home-tasks-console__check-btn:hover {
+    color: oklch(0.48 0.02 260 / 0.75);
+  }
+
+  .home-tasks-console__check-btn:active {
+    transform: scale(0.92);
+  }
+
+  .home-tasks-console__check-btn--done {
+    color: oklch(0.42 0.02 260 / 0.82);
+  }
+
+  .home-tasks-console__check-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .home-tasks-console__task-text {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.45;
+    transition:
+      opacity 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .home-tasks-console__zone-item--done .home-tasks-console__task-text {
+    text-decoration: line-through;
+    text-decoration-color: oklch(0.55 0.01 260 / 0.35);
+    color: oklch(0.5 0.012 260 / 0.65);
+  }
+
+  .home-tasks-console__zone-list {
+    margin: 0 0 0.625rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .home-tasks-console__zone-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: oklch(0.32 0.014 260);
+  }
+
+  .home-tasks-console__zone-item + .home-tasks-console__zone-item {
+    margin-top: 0.4rem;
+  }
+
+  .home-tasks-console__zone-item--ai {
+    color: oklch(0.34 0.012 260);
+  }
+
+  .home-tasks-console__add-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .home-tasks-console__input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid oklch(0.88 0.02 260 / 0.35);
+    border-radius: 0.75rem;
+    background: oklch(1 0 0 / 0.75);
+    font-size: 0.8125rem;
+    outline: none;
+  }
+
+  .home-tasks-console__input:focus {
+    border-color: oklch(0.72 0.015 260 / 0.5);
+    box-shadow: 0 0 0 3px oklch(0.9 0.008 260 / 0.35);
+  }
+
+  .home-tasks-console__add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid oklch(0.86 0.01 260 / 0.45);
+    border-radius: 0.75rem;
+    background: oklch(0.97 0.004 260 / 0.9);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: oklch(0.36 0.012 260);
+    cursor: pointer;
+  }
+
+  .home-tasks-console__add-btn:hover {
+    background: oklch(0.94 0.006 260 / 0.95);
+    border-color: oklch(0.8 0.01 260 / 0.5);
+  }
+
+  .home-tasks-console__ai-hint {
+    margin: 0 0 0.625rem;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: oklch(0.5 0.012 260 / 0.85);
+  }
+
+  .home-tasks-console__magic-btn {
+    display: inline-flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid oklch(0.86 0.01 260 / 0.45);
+    border-radius: 0.75rem;
+    background: oklch(0.98 0.004 260 / 0.85);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: oklch(0.38 0.012 260);
+    box-shadow: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .home-tasks-console__magic-btn:hover:not(:disabled) {
+    background: oklch(0.96 0.006 260 / 0.95);
+  }
+
+  .home-tasks-console__magic-btn--busy {
+    opacity: 0.75;
+    cursor: wait;
+  }
+
+  .home-tasks-console__magic-btn:disabled {
+    cursor: wait;
   }
 
   /* 功能入口：与宣传语同宽 content rail，三卡铺满整行 */
@@ -695,7 +1115,7 @@
 
   /* 底栏导航 */
   .app-main--with-bottom-nav {
-    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
   }
 
   /* 底栏：全宽铺底，与地图页背景同系 */
@@ -726,9 +1146,9 @@
     width: 100%;
     max-width: 36rem;
     margin-inline: auto;
-    min-height: 3.125rem;
-    padding: 0.3125rem 0.75rem 0.375rem;
-    gap: 0.375rem;
+    min-height: var(--bottom-nav-height);
+    padding: 0.2rem 0.625rem 0.25rem;
+    gap: 0.25rem;
   }
 
   .bottom-nav__tab {
@@ -736,8 +1156,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.5rem;
-    border-radius: 0.875rem;
+    min-height: 2.125rem;
+    border-radius: 0.75rem;
     text-decoration: none;
     color: oklch(0.58 0.012 260 / 0.88);
     -webkit-tap-highlight-color: transparent;
@@ -785,8 +1205,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.1875rem;
-    padding: 0.25rem 0.625rem 0.3125rem;
+    gap: 0.125rem;
+    padding: 0.1875rem 0.5rem 0.25rem;
     transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
@@ -799,8 +1219,8 @@
   }
 
   .bottom-nav__icon {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: 1rem;
+    height: 1rem;
     flex-shrink: 0;
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -810,8 +1230,8 @@
   }
 
   .bottom-nav__label {
-    font-size: 0.6875rem;
-    line-height: 1.35;
+    font-size: 0.625rem;
+    line-height: 1.25;
     letter-spacing: 0.02em;
     white-space: nowrap;
   }
@@ -1308,6 +1728,20 @@
         oklch(0.958 0.016 58) 0%,
         oklch(0.972 0.01 85) 45%,
         oklch(0.964 0.014 228) 100%
+      );
+  }
+
+  /* 教师后台：与学生端 map-page-shell 冷暖方向对调（冷→暖，自上而下） */
+  .map-page-shell--teacher {
+    background:
+      radial-gradient(ellipse 70% 55% at 8% 0%, oklch(0.94 0.034 232 / 0.28) 0%, transparent 68%),
+      radial-gradient(ellipse 68% 58% at 92% 100%, oklch(0.93 0.038 52 / 0.26) 0%, transparent 66%),
+      radial-gradient(ellipse 52% 42% at 6% 96%, oklch(0.91 0.04 320 / 0.14) 0%, transparent 55%),
+      linear-gradient(
+        168deg,
+        oklch(0.964 0.014 228) 0%,
+        oklch(0.972 0.01 85) 45%,
+        oklch(0.958 0.016 58) 100%
       );
   }
 
@@ -2095,6 +2529,896 @@
     paint-order: stroke fill;
     stroke: oklch(1 0 0 / 0.92);
     stroke-width: 4px;
+  }
+
+  /* —— 地图探索 · 日系旅程视觉令牌 —— */
+  .map-journey-panel,
+  .map-boarding-pass-root,
+  .map-iris-root {
+    --map-journey-paper: oklch(0.97 0.012 85);
+    --map-journey-paper-deep: oklch(0.94 0.018 80);
+    --map-journey-navy: oklch(0.38 0.05 250);
+    --map-journey-navy-muted: oklch(0.52 0.04 250);
+    --map-journey-clay: oklch(0.72 0.06 55);
+    --map-journey-sage: oklch(0.78 0.04 155);
+    --map-journey-sea: oklch(0.9 0.03 230);
+    --map-journey-stamp: oklch(0.55 0.12 25);
+    --map-journey-shadow: oklch(0.45 0.03 260 / 0.1);
+    --map-journey-shadow-soft: oklch(0.5 0.02 260 / 0.06);
+  }
+
+  .map-journey-panel__bar {
+    border-color: oklch(0.88 0.02 85 / 0.65);
+    background: oklch(0.99 0.008 90 / 0.72);
+  }
+
+  .map-journey-badge {
+    border-color: oklch(0.85 0.02 250 / 0.35);
+    background: var(--map-journey-paper);
+    color: var(--map-journey-navy-muted);
+  }
+
+  .map-explorer-main-with-companion {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .map-explorer-main-with-companion {
+      flex-direction: column;
+    }
+
+    .map-traveler-companion {
+      flex-direction: row !important;
+      align-items: flex-end;
+      border-right: none !important;
+      border-bottom: 1px solid oklch(0.88 0.02 85 / 0.65);
+      max-width: none;
+      min-width: 0;
+      padding: 0.75rem 1rem !important;
+    }
+
+    .map-traveler-companion__dialogue {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  .map-traveler-companion {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    width: min(100%, 14.5rem);
+    min-width: 11.5rem;
+    flex-shrink: 0;
+    padding: 0.85rem 0.65rem 0.75rem;
+    border-right: 1px solid oklch(0.88 0.02 85 / 0.65);
+    background: linear-gradient(
+      180deg,
+      oklch(0.98 0.01 90 / 0.95) 0%,
+      oklch(0.94 0.025 230 / 0.35) 55%,
+      oklch(0.96 0.015 85 / 0.88) 100%
+    );
+  }
+
+  .map-traveler-companion__dialogue {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 0;
+  }
+
+  .map-traveler-companion__bubble {
+    position: relative;
+    border-radius: 1rem;
+    border: 1.5px solid oklch(0.82 0.02 250 / 0.35);
+    background: oklch(0.995 0.006 95);
+    padding: 0.7rem 0.75rem 0.8rem;
+    box-shadow:
+      0 6px 18px var(--map-journey-shadow-soft),
+      inset 0 1px 0 oklch(1 0 0 / 0.8);
+  }
+
+  .map-traveler-companion__bubble::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 14px;
+    height: 14px;
+    transform: translateX(-50%) rotate(45deg);
+    background: oklch(0.995 0.006 95);
+    border-right: 1.5px solid oklch(0.82 0.02 250 / 0.35);
+    border-bottom: 1.5px solid oklch(0.82 0.02 250 / 0.35);
+    box-shadow: 3px 3px 6px oklch(0.45 0.03 260 / 0.06);
+  }
+
+  .map-traveler-companion__bubble-text {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    min-height: 4.25rem;
+  }
+
+  .map-traveler-companion__bubble-inner {
+    display: block;
+    font-size: 0.8rem;
+    line-height: 1.58;
+    color: var(--map-journey-navy);
+  }
+
+  .map-traveler-companion__bubble--with-action {
+    padding-bottom: 0.55rem;
+  }
+
+  .map-traveler-companion__action-slot {
+    position: relative;
+    z-index: 1;
+    min-height: 0;
+    margin-top: 0.15rem;
+  }
+
+  .map-traveler-companion__action-slot--reserved {
+    min-height: 2.65rem;
+  }
+
+  .map-game-depart-btn {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.85rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: oklch(0.99 0.01 95);
+    cursor: pointer;
+    background: linear-gradient(
+      180deg,
+      oklch(0.62 0.11 250) 0%,
+      oklch(0.48 0.09 250) 48%,
+      oklch(0.42 0.08 250) 100%
+    );
+    box-shadow:
+      0 3px 0 oklch(0.35 0.08 250),
+      0 5px 14px oklch(0.4 0.07 250 / 0.35),
+      inset 0 1px 0 oklch(1 0 0 / 0.28);
+    transition:
+      transform 0.14s ease,
+      box-shadow 0.14s ease,
+      filter 0.14s ease;
+  }
+
+  .map-game-depart-btn:hover {
+    filter: brightness(1.06);
+  }
+
+  .map-game-depart-btn:active {
+    transform: translateY(2px);
+    box-shadow:
+      0 1px 0 oklch(0.35 0.08 250),
+      0 3px 8px oklch(0.4 0.07 250 / 0.28),
+      inset 0 1px 0 oklch(1 0 0 / 0.2);
+  }
+
+  .map-game-depart-btn__icon {
+    font-size: 0.85rem;
+    line-height: 1;
+    opacity: 0.95;
+  }
+
+  .map-game-depart-btn__label {
+    text-shadow: 0 1px 0 oklch(0.32 0.06 250 / 0.35);
+  }
+
+  .map-traveler-companion__stage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 7.5rem;
+    padding-top: 0.15rem;
+    perspective: 520px;
+    perspective-origin: 42% 88%;
+  }
+
+  .map-island-scene {
+    width: 100%;
+    max-width: 13.5rem;
+    transform: rotateX(4deg);
+    transform-origin: center 92%;
+    filter: drop-shadow(0 10px 18px oklch(0.45 0.04 250 / 0.1));
+  }
+
+  .map-island-scene__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .map-island-scene__face-top {
+    stroke: oklch(0.65 0.07 140 / 0.35);
+    stroke-width: 0.6;
+  }
+
+  .map-island-scene__face-left,
+  .map-island-scene__face-right {
+    stroke: oklch(0.48 0.06 140 / 0.4);
+    stroke-width: 0.5;
+  }
+
+  .map-island-scene__skin {
+    fill: oklch(0.9 0.04 65);
+    stroke: oklch(0.78 0.05 55 / 0.3);
+    stroke-width: 0.5;
+  }
+
+  .map-island-scene__hair {
+    fill: oklch(0.42 0.06 55);
+  }
+
+  .map-island-scene__shirt {
+    fill: oklch(0.55 0.09 250);
+    stroke: oklch(0.45 0.07 250 / 0.35);
+    stroke-width: 0.5;
+  }
+
+  .map-island-scene__pants {
+    fill: oklch(0.48 0.05 260);
+    stroke: oklch(0.4 0.04 260 / 0.3);
+    stroke-width: 0.4;
+  }
+
+  .map-island-scene__eye {
+    fill: oklch(0.32 0.04 260);
+  }
+
+  .map-island-scene__eye--far {
+    opacity: 0.65;
+  }
+
+  .map-island-scene__mouth {
+    stroke: oklch(0.45 0.05 25 / 0.55);
+  }
+
+  .map-island-scene__blush {
+    fill: oklch(0.78 0.06 25 / 0.35);
+  }
+
+  .map-island-scene--look-map .map-island-scene__traveler {
+    transform-origin: 14px 52px;
+  }
+
+  .map-traveler-companion__stage--curious .map-island-scene__traveler {
+    transform: translateX(1px);
+  }
+
+  .map-traveler-companion__stage--flying .map-island-scene {
+    opacity: 0.55;
+    transform: rotateX(4deg) scale(0.96);
+  }
+
+  .map-traveler-companion__stage-caption {
+    position: absolute;
+    bottom: 0.15rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--map-journey-navy-muted);
+  }
+
+  .map-traveler-companion__figure--curious .map-traveler-companion__svg {
+    filter: brightness(1.03);
+  }
+
+  .map-traveler-figure__shadow {
+    fill: var(--map-journey-shadow);
+  }
+
+  .map-traveler-figure__skin {
+    fill: oklch(0.9 0.04 65);
+    stroke: oklch(0.78 0.05 55 / 0.35);
+    stroke-width: 0.6;
+  }
+
+  .map-traveler-figure__hair {
+    fill: oklch(0.42 0.06 55);
+  }
+
+  .map-traveler-figure__shirt {
+    fill: oklch(0.55 0.08 250);
+    stroke: oklch(0.45 0.06 250 / 0.4);
+    stroke-width: 0.6;
+  }
+
+  .map-traveler-figure__collar {
+    stroke: oklch(0.92 0.02 90 / 0.9);
+  }
+
+  .map-traveler-figure__pants {
+    fill: oklch(0.48 0.04 260);
+    stroke: oklch(0.4 0.04 260 / 0.35);
+    stroke-width: 0.5;
+  }
+
+  .map-traveler-figure__eye {
+    fill: oklch(0.32 0.04 260);
+  }
+
+  .map-traveler-figure__mouth {
+    stroke: oklch(0.45 0.05 25 / 0.55);
+  }
+
+  .map-traveler-figure__blush {
+    fill: oklch(0.78 0.06 25 / 0.35);
+  }
+
+  .map-flight-plane-wrap {
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-flight-plane-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .map-flight-plane-svg__shadow {
+    fill: var(--map-journey-shadow);
+  }
+
+  .map-flight-plane-svg__body {
+    fill: oklch(0.97 0.01 95);
+    stroke: var(--map-journey-navy);
+    stroke-width: 1.2;
+  }
+
+  .map-flight-plane-svg__window {
+    fill: oklch(0.82 0.04 230 / 0.55);
+  }
+
+  .map-flight-plane-svg__window--dim {
+    fill: oklch(0.78 0.03 230 / 0.4);
+  }
+
+  .map-flight-plane-svg__wing {
+    fill: oklch(0.88 0.03 250);
+    stroke: var(--map-journey-navy-muted);
+    stroke-width: 0.8;
+  }
+
+  .map-flight-plane-svg__wing--rear {
+    fill: oklch(0.85 0.03 250);
+  }
+
+  .map-flight-plane-svg__tail {
+    fill: var(--map-journey-navy-muted);
+    stroke: var(--map-journey-navy);
+    stroke-width: 0.6;
+  }
+
+  .map-flight-plane-svg__tail--low {
+    fill: oklch(0.5 0.05 250);
+  }
+
+  .map-flight-plane-svg__nose {
+    fill: oklch(0.72 0.06 55);
+    stroke: var(--map-journey-navy);
+    stroke-width: 0.8;
+  }
+
+  .map-traveler-companion__cursor {
+    display: inline-block;
+    margin-left: 1px;
+    animation: map-speech-cursor 0.9s step-end infinite;
+    color: var(--map-journey-clay);
+    font-weight: 300;
+  }
+
+  @keyframes map-speech-cursor {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .map-journey-stage {
+    background: linear-gradient(
+      168deg,
+      var(--map-journey-sea) 0%,
+      oklch(0.95 0.015 90) 42%,
+      oklch(0.93 0.02 230 / 0.35) 100%
+    );
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.45);
+  }
+
+  .map-journey-canvas {
+    filter: drop-shadow(0 3px 10px var(--map-journey-shadow-soft))
+      drop-shadow(0 1px 2px var(--map-journey-shadow));
+  }
+
+  .map-journey-depart-btn,
+  .map-journey-enter-btn {
+    border-color: oklch(0.82 0.02 250 / 0.4);
+    background: oklch(0.99 0.01 90 / 0.92);
+    color: var(--map-journey-navy);
+    box-shadow: 0 4px 14px var(--map-journey-shadow-soft);
+    backdrop-filter: blur(6px);
+  }
+
+  .map-journey-depart-btn:hover,
+  .map-journey-enter-btn:hover {
+    border-color: oklch(0.7 0.04 250 / 0.45);
+    background: var(--map-journey-paper);
+  }
+
+  /* 航线拖尾：静态绘制，避免 dash 动画引起晃动感 */
+  .map-flight-trail--glow {
+    opacity: 0.5;
+  }
+
+  .map-flight-trail--dash {
+    opacity: 0.88;
+  }
+
+  .map-journey-layer {
+    contain: layout style;
+  }
+
+  .map-explorer-main-with-companion,
+  .map-journey-stage {
+    contain: layout;
+  }
+
+  /* 小人：黏土质感 + 呼吸 / 奔跑 */
+  .map-flight-character-body {
+    fill: var(--map-journey-navy);
+  }
+
+  .map-flight-character-head {
+    fill: oklch(0.96 0.015 85);
+    stroke: var(--map-journey-navy);
+    stroke-width: 1px;
+  }
+
+  .map-flight-character-shadow {
+    fill: var(--map-journey-shadow);
+  }
+
+  .map-flight-character--breathe {
+    animation: map-traveler-breathe 2.8s ease-in-out infinite;
+  }
+
+  @keyframes map-traveler-breathe {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+
+  .map-flight-character--walk {
+    animation: map-traveler-walk 0.34s ease-in-out infinite;
+  }
+
+  @keyframes map-traveler-walk {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  .map-flight-bubble-body {
+    fill: oklch(0.99 0.01 90);
+    stroke: oklch(0.88 0.02 250 / 0.35);
+    stroke-width: 1px;
+    filter: drop-shadow(0 2px 6px var(--map-journey-shadow-soft));
+  }
+
+  .map-flight-bubble-tail {
+    fill: oklch(0.99 0.01 90);
+  }
+
+  .map-flight-bubble {
+    animation: map-bubble-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes map-bubble-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6) translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .map-flight-bubble-emoji {
+    font-size: 11px;
+  }
+
+  .map-flight-plane--soft {
+    filter: drop-shadow(0 3px 6px var(--map-journey-shadow-soft));
+  }
+
+  /* 海上彩蛋 */
+  .map-sea-surprise {
+    opacity: 0;
+    animation: map-sea-surprise-in 2.6s ease-out forwards;
+  }
+
+  @keyframes map-sea-surprise-in {
+    0% {
+      opacity: 0;
+    }
+    18% {
+      opacity: 0.82;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .map-sea-surprise__shadow {
+    fill: oklch(0.55 0.03 250 / 0.08);
+  }
+
+  .map-sea-surprise__whale-body,
+  .map-sea-surprise__boat-hull {
+    fill: oklch(0.62 0.04 250 / 0.35);
+  }
+
+  .map-sea-surprise__whale-tail,
+  .map-sea-surprise__boat-mast {
+    stroke: oklch(0.55 0.04 250 / 0.4);
+    stroke-width: 1.2px;
+    fill: none;
+  }
+
+  .map-sea-surprise__whale-spray {
+    fill: none;
+    stroke: oklch(0.75 0.03 230 / 0.5);
+    stroke-width: 1.2px;
+    stroke-linecap: round;
+    animation: map-whale-spray 1.8s ease-in-out infinite;
+  }
+
+  @keyframes map-whale-spray {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: translateY(2px);
+    }
+    40% {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+  }
+
+  .map-sea-surprise__boat-sail {
+    fill: oklch(0.88 0.03 85 / 0.7);
+    stroke: oklch(0.7 0.03 250 / 0.25);
+    stroke-width: 0.8px;
+  }
+
+
+  /* 登机牌 / 护照 */
+  .map-boarding-pass-root {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    background: oklch(0.25 0.03 260 / 0.28);
+    backdrop-filter: blur(4px);
+    animation: map-boarding-backdrop-in 0.55s ease-out;
+  }
+
+  @keyframes map-boarding-backdrop-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .map-boarding-pass {
+    position: relative;
+    width: min(100%, 22rem);
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid oklch(0.86 0.02 85 / 0.9);
+    background: var(--map-journey-paper);
+    padding: 1.35rem 1.25rem 1.1rem;
+    color: var(--map-journey-navy);
+    box-shadow:
+      0 20px 50px oklch(0.35 0.04 260 / 0.14),
+      0 2px 0 oklch(1 0 0 / 0.65) inset;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .map-boarding-pass--enter {
+    animation: map-boarding-card-in 0.85s ease-out forwards;
+  }
+
+  @keyframes map-boarding-card-in {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .map-boarding-pass--fade {
+    animation: map-boarding-card-out 0.9s ease-in forwards;
+  }
+
+  @keyframes map-boarding-card-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  .map-boarding-pass__texture {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+    background-image: radial-gradient(
+        oklch(0.75 0.02 85 / 0.25) 0.6px,
+        transparent 0.6px
+      ),
+      linear-gradient(
+        105deg,
+        transparent 40%,
+        oklch(0.9 0.02 85 / 0.15) 50%,
+        transparent 60%
+      );
+    background-size: 6px 6px, 100% 100%;
+  }
+
+  .map-boarding-pass__header {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .map-boarding-pass__eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--map-journey-navy-muted);
+  }
+
+  .map-boarding-pass__title {
+    margin-top: 0.2rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .map-boarding-pass__route {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px dashed oklch(0.82 0.02 250 / 0.35);
+  }
+
+  .map-boarding-pass__label {
+    display: block;
+    font-size: 0.62rem;
+    color: var(--map-journey-navy-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .map-boarding-pass__place {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .map-boarding-pass__arrow {
+    font-size: 0.85rem;
+    opacity: 0.55;
+  }
+
+  .map-boarding-pass__meta {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    font-size: 0.72rem;
+  }
+
+  .map-boarding-pass__meta dt {
+    color: var(--map-journey-navy-muted);
+    font-size: 0.62rem;
+  }
+
+  .map-boarding-pass__meta dd {
+    margin-top: 0.1rem;
+    font-weight: 500;
+  }
+
+  .map-boarding-pass__stamp-area {
+    position: relative;
+    margin-top: 1.1rem;
+    min-height: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .map-boarding-pass__stamp {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 5.2rem;
+    height: 5.2rem;
+    transform: scale(1.8) rotate(var(--stamp-rotate, -4deg));
+    opacity: 0;
+    color: var(--map-journey-stamp);
+  }
+
+  .map-boarding-pass__stamp--pressed {
+    animation: map-stamp-slam 0.65s ease-out forwards;
+  }
+
+  @keyframes map-stamp-slam {
+    0% {
+      transform: scale(1.35) rotate(var(--stamp-rotate, -4deg));
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) rotate(var(--stamp-rotate, -4deg));
+      opacity: 0.9;
+    }
+  }
+
+  .map-boarding-pass--fade .map-boarding-pass__stamp--pressed {
+    animation:
+      map-stamp-slam 0.65s ease-out forwards,
+      map-stamp-fade 0.75s ease-in 0.5s forwards;
+  }
+
+  @keyframes map-stamp-fade {
+    to {
+      opacity: 0;
+    }
+  }
+
+  .map-boarding-pass__stamp-ring {
+    position: absolute;
+    inset: 0;
+    border: 2.5px solid currentColor;
+    border-radius: 50%;
+    opacity: 0.85;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  }
+
+  .map-boarding-pass__stamp-text {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 3.8rem;
+  }
+
+  .map-boarding-pass__stamp-sub {
+    margin-top: 0.15rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    opacity: 0.75;
+  }
+
+  .map-boarding-pass__footnote {
+    position: relative;
+    margin-top: 0.75rem;
+    font-size: 0.62rem;
+    color: var(--map-journey-navy-muted);
+    text-align: center;
+  }
+
+  @property --iris-r {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 120vmax;
+  }
+
+  /* 光圈落地转场 */
+  .map-iris-root {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+  }
+
+  .map-iris-veil {
+    width: 100%;
+    height: 100%;
+    background: var(--map-journey-paper);
+    -webkit-mask-image: radial-gradient(
+      circle at var(--iris-x, 50%) var(--iris-y, 45%),
+      transparent 0,
+      transparent var(--iris-r, 120vmax),
+      black var(--iris-r, 120vmax)
+    );
+    mask-image: radial-gradient(
+      circle at var(--iris-x, 50%) var(--iris-y, 45%),
+      transparent 0,
+      transparent var(--iris-r, 120vmax),
+      black var(--iris-r, 120vmax)
+    );
+    --iris-r: 120vmax;
+  }
+
+  .map-iris-root--play .map-iris-veil {
+    animation: map-iris-close 1.45s cubic-bezier(0.45, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes map-iris-close {
+    from {
+      --iris-r: 120vmax;
+    }
+    to {
+      --iris-r: 0px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .map-island-scene {
+      transform: none;
+    }
+
+    .map-flight-trail,
+    .map-flight-character--breathe,
+    .map-flight-character--walk,
+    .map-sea-surprise,
+    .map-whale-spray,
+    .map-sailboat-drift {
+      animation: none !important;
+    }
+
+    .map-iris-root--play .map-iris-veil {
+      animation-duration: 0.3s;
+    }
+
+    .map-boarding-pass--enter,
+    .map-boarding-pass--fade {
+      animation-duration: 0.2s;
+    }
   }
 
   .map-knowledge-template {
@@ -3713,4 +5037,52 @@
   .mode-send-btn-basic:hover:not(:disabled) {
     filter: brightness(1.05);
   }
+}
+
+/* 机构许可 · 子页签抹茶呼吸 & 握手动画 */
+@keyframes licensing-subtab-breathe {
+  0%,
+  100% {
+    background: oklch(0.97 0.03 145 / 0.55);
+    box-shadow: 0 2px 8px oklch(0.55 0.08 145 / 0.12);
+  }
+  50% {
+    background: oklch(0.95 0.045 145 / 0.72);
+    box-shadow: 0 3px 12px oklch(0.58 0.09 145 / 0.2);
+  }
+}
+
+@keyframes licensing-handshake-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+.licensing-sub-tabs__btn--active {
+  animation: licensing-subtab-breathe 3.2s ease-in-out infinite;
+}
+
+.licensing-handshake svg {
+  animation: licensing-handshake-pulse 2.4s ease-in-out infinite;
+}
+
+/* 业务大屏 · 栏内滚动 */
+.dashboard-column-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.75 0.04 145 / 0.45) transparent;
+}
+
+.dashboard-column-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dashboard-column-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: oklch(0.72 0.05 145 / 0.35);
 }

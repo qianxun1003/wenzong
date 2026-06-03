@@ -9,6 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { createKnowledgeEntry } from "@/lib/api";
+import {
+  EJU_KNOWLEDGE_BODY_HINT,
+  EJU_KNOWLEDGE_TAG_EXAMPLE,
+} from "@/lib/eju-syllabus";
 
 interface DirectEntryPanelProps {
   onSaved?: () => void;
@@ -58,7 +62,7 @@ export function DirectEntryPanel({ onSaved }: DirectEntryPanelProps) {
           <Label htmlFor="tag">标签 / 主题</Label>
           <Input
             id="tag"
-            placeholder="例如：日本史 · 高度经济成长期"
+            placeholder={`例如：${EJU_KNOWLEDGE_TAG_EXAMPLE}`}
             value={tag}
             onChange={(e) => setTag(e.target.value)}
             className="bg-background"
@@ -72,7 +76,7 @@ export function DirectEntryPanel({ onSaved }: DirectEntryPanelProps) {
           <Label htmlFor="content">核心内容</Label>
           <Textarea
             id="content"
-            placeholder="在此输入考点正文，如时间线、因果关系、关键词解释等..."
+            placeholder={EJU_KNOWLEDGE_BODY_HINT}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className="min-h-[200px] resize-y bg-background text-sm leading-relaxed"

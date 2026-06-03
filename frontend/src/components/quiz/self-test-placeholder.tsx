@@ -7,15 +7,11 @@ import { QuizSubpageHeader } from "@/components/quiz/quiz-subpage-header";
 import { QuizWorkflowSteps } from "@/components/quiz/quiz-workflow-steps";
 import { Button } from "@/components/ui/button";
 import { QUIZ_MODES } from "@/lib/quiz-modes";
+import { EJU_SELF_TEST_TOPICS } from "@/lib/eju-syllabus";
 
 const mode = QUIZ_MODES.find((m) => m.id === "self-test")!;
 
-const PLACEHOLDER_TOPICS = [
-  "冷战开端",
-  "欧盟成立",
-  "日本经济高速增长",
-  "德国统一",
-];
+const PLACEHOLDER_TOPICS = [...EJU_SELF_TEST_TOPICS];
 
 export function SelfTestPlaceholder() {
   return (

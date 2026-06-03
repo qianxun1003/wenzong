@@ -7,49 +7,21 @@ import { AssistantAnswerDetail } from "@/components/student/assistant-answer-det
 import { buttonVariants } from "@/components/ui/button";
 import { fetchPopularQuestions } from "@/lib/api";
 import { ANSWER_MODES, type AnswerMode, type PopularQuestionItem } from "@/lib/types";
+import { EJU_POPULAR_DEMO } from "@/lib/eju-syllabus";
 import { cn } from "@/lib/utils";
 
 const POLL_MS = 12_000;
 
-const DEMO_ITEMS: PopularQuestionItem[] = [
-  {
-    id: "demo-1",
-    question_display: "日本高度经济成长期是什么？",
-    ask_count: 28,
-    last_answer_mode: "eju",
-    last_reply: "",
-    last_sections: [
-      { key: "core_conclusion", title: "核心结论", content: "1955—1973 年前后日本经济高速增长…" },
-      { key: "eju_points", title: "EJU考点", content: "时期、特征、与贸易结构变化…" },
-    ],
-    last_citations: [],
-    last_asked_at: "",
-  },
-  {
-    id: "demo-2",
-    question_display: "美国的政治体制有何特点？",
-    ask_count: 19,
-    last_answer_mode: "basic",
-    last_reply: "",
-    last_sections: [
-      { key: "core_conclusion", title: "核心结论", content: "三权分立、联邦制…" },
-    ],
-    last_citations: [],
-    last_asked_at: "",
-  },
-  {
-    id: "demo-3",
-    question_display: "世界上的峡湾地貌典型例子？",
-    ask_count: 12,
-    last_answer_mode: "deep",
-    last_reply: "",
-    last_sections: [
-      { key: "core_conclusion", title: "核心结论", content: "挪威西海岸、新西兰峡湾等…" },
-    ],
-    last_citations: [],
-    last_asked_at: "",
-  },
-];
+const DEMO_ITEMS: PopularQuestionItem[] = EJU_POPULAR_DEMO.map((item) => ({
+  id: item.id,
+  question_display: item.question_display,
+  ask_count: item.ask_count,
+  last_answer_mode: item.last_answer_mode,
+  last_reply: "",
+  last_sections: item.last_sections.map((s) => ({ ...s })),
+  last_citations: [],
+  last_asked_at: item.last_asked_at,
+}));
 
 function formatAskedAt(iso: string) {
   if (!iso) return "";
@@ -80,7 +52,7 @@ export function PopularQuestionsPage() {
 
   const stats = useMemo(() => {
     if (isDemo) {
-      return { count: 3, totalAsks: 59 };
+      return { count: 3, totalAsks: EJU_POPULAR_DEMO.reduce((s, i) => s + i.ask_count, 0) };
     }
     return {
       count: items.length,

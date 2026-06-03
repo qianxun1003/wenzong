@@ -3,12 +3,29 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routers import chat, documents, knowledge
+from app.core.exceptions import (
+    AuthError,
+    MigrationError,
+    OrganizationExpiredException,
+    OrganizationFrozenException,
+    PlatformError,
+    TenantIsolationError,
+)
+from app.routers import (
+    auth,
+    chat,
+    db_management,
+    documents,
+    knowledge,
+    migration,
+    org,
+    teacher,
+)
 
 app = FastAPI(
     title="文综 AI 智能导师 API",
-    description="RAG 检索 + 大模型问答 · 教师知识库管理",
-    version="0.1.0",
+    description="RAG 检索 + 统一账户 + ToB 多租户教学平台",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -22,6 +39,28 @@ app.add_middleware(
 app.include_router(chat.router)
 app.include_router(documents.router)
 app.include_router(knowledge.router)
+app.include_router(auth.router)
+app.include_router(org.router)
+app.include_router(teacher.router)
+app.include_router(migration.router)
+app.include_router(db_management.router)
+
+
+@app.exception_handler(PlatformError)
+async def platform_error_handler(_: Request, exc: PlatformError):
+    status = 403 if isinstance(exc, TenantIsolationError) else 400
+    if isinstance(exc, AuthError):
+        status = 401
+    if isinstance(exc, MigrationError):
+        status = 400
+    if isinstance(exc, OrganizationExpiredException):
+        status = 402
+    if isinstance(exc, OrganizationFrozenException):
+        status = 403
+    return JSONResponse(
+        status_code=status,
+        content={"detail": exc.message, "code": exc.code},
+    )
 
 
 @app.exception_handler(RuntimeError)

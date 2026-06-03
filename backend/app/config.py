@@ -25,6 +25,11 @@ class Settings(BaseSettings):
 
     cors_origins: str = "http://localhost:3000"
 
+    # 统一账户 JWT（生产环境务必通过环境变量注入强随机密钥）
+    jwt_secret: str = "dev-change-me-in-production"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 60 * 24 * 7
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

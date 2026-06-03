@@ -18,7 +18,12 @@ interface WorldRegionPanelProps {
   layerLabel: string;
 }
 
-export function WorldRegionPanel({ selectedId, onSelect, layerMode, layerLabel }: WorldRegionPanelProps) {
+export function WorldRegionPanel({
+  selectedId,
+  onSelect,
+  layerMode,
+  layerLabel,
+}: WorldRegionPanelProps) {
   const selectedRegion = WORLD_REGIONS.find((r) => r.id === selectedId);
   const sidebarItems = buildWorldSidebarItems();
 
