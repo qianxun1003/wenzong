@@ -6,6 +6,7 @@ import { AlertCircle, PanelLeft } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 import { ChatSidebar } from "./chat-sidebar";
 import { ChatMain } from "./chat-main";
 import { sendChatMessage, checkBackendHealth, getWelcomeMessages } from "@/lib/api";
@@ -237,7 +238,7 @@ function StudentChatLayoutInner() {
       )}
 
       <div className="student-ambient-shell relative z-10 flex min-h-0 flex-1 overflow-hidden">
-        <div className="student-sidebar-rail hidden w-72 shrink-0 lg:block xl:w-80">
+        <div className="student-sidebar-rail hidden w-72 shrink-0 min-[721px]:block xl:w-80">
           {sidebar}
         </div>
 
@@ -248,17 +249,21 @@ function StudentChatLayoutInner() {
         </Sheet>
 
         <div className="student-chat-pane flex min-w-0 flex-1 flex-col">
-          <div className="student-chat-topbar flex shrink-0 items-center gap-2 px-3 py-2 lg:hidden">
+          <div className="student-chat-topbar hidden max-[720px]:flex shrink-0 items-center gap-2 border-b border-border/40 bg-background/80 px-3 py-2 backdrop-blur-sm">
             <Button
+              type="button"
               variant="ghost"
-              size="icon"
-              className="h-8 w-8"
+              size="sm"
+              className={cn(
+                "-ml-1 gap-1.5 text-muted-foreground hover:text-foreground",
+                "h-8 px-2.5 text-sm font-medium"
+              )}
               onClick={() => setSidebarOpen(true)}
-              aria-label="打开对话历史与工具"
+              aria-label="打开对话历史"
             >
-              <PanelLeft className="h-4 w-4" />
+              <PanelLeft className="h-4 w-4 shrink-0" aria-hidden />
+              对话历史
             </Button>
-            <span className="truncate text-sm font-medium">文综 AI 导师</span>
           </div>
 
           <div className="min-h-0 flex-1 overflow-hidden">

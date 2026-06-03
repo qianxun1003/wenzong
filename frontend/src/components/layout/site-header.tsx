@@ -7,6 +7,7 @@ import { BookOpen, ClipboardList, Globe2, GraduationCap, Menu } from "lucide-rea
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { BackToHomeLink } from "@/components/layout/back-to-home-link";
+import { shouldShowBottomNav } from "@/lib/bottom-nav-visibility";
 import { cn } from "@/lib/utils";
 
 /** 顶栏：各功能入口；个人主页在底栏 */
@@ -27,13 +28,13 @@ export function SiteHeader() {
     window.setTimeout(() => router.push(href), 0);
   };
 
-  const isHome = pathname === "/";
+  const showBackToHome = !shouldShowBottomNav(pathname);
 
   return (
     <header className="site-header-bar">
       <div className="flex h-14 w-full items-center justify-between px-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-1 sm:gap-2">
-          {!isHome && <BackToHomeLink className="-ml-2 shrink-0" />}
+          {showBackToHome && <BackToHomeLink className="-ml-2 shrink-0" />}
           <Link href="/" className="flex min-w-0 items-center gap-2.5 group">
           <div className="flex h-8 items-center justify-center rounded-full bg-accent px-3 shadow-[var(--soft-glow-sm)]">
             <BookOpen className="h-3.5 w-3.5 text-primary" />

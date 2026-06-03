@@ -10,7 +10,10 @@ export function HomeHubLayout() {
           <header className="home-entry-hub__header">
             <p className="home-entry-hub__eyebrow">Japan and the World</p>
             <h1 className="home-entry-hub__heading">EJU 文综・学习平台</h1>
-            <p className="home-entry-hub__quote">
+            <p
+              className="home-entry-hub__quote"
+              title="把死记硬背留给过去。现在，一起用逻辑和地图重新解构留考文综。"
+            >
               「把死记硬背留给过去。现在，一起用逻辑和地图重新解构留考文综。」
             </p>
           </header>

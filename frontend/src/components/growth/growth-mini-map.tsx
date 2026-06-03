@@ -100,6 +100,7 @@ export function GrowthMiniMap(props: GrowthMiniMapProps) {
       <div className="growth-mini-map__canvas">
         <svg
           viewBox={viewBox}
+          preserveAspectRatio="xMidYMid meet"
           className="growth-mini-map__svg h-full w-full"
           role="img"
           aria-hidden

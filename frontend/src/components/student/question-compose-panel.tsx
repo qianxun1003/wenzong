@@ -73,16 +73,16 @@ export function QuestionComposePanel({
 
   return (
     <div className={cn("glass-compose-panel", "glass-compose-panel--hero")}>
-      <div className="mb-8 text-center">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs text-[var(--ui-ink-muted)] glass-hero-badge">
-          <Sparkles className="h-3 w-3 text-[var(--ui-ink-muted)]" />
+      <div className="compose-hero-head mb-8 max-[720px]:mb-3 text-center">
+        <div className="glass-hero-badge mb-4 max-md:mb-2 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs text-[var(--ui-ink-muted)]">
+          <Sparkles className="h-3 w-3 shrink-0 text-[var(--ui-ink-muted)]" />
           基于老师讲义 · 四种回答方式
         </div>
-        <h1 className="text-xl font-semibold tracking-tight text-[var(--ui-ink)] sm:text-2xl">
+        <h1 className="compose-hero-head__title text-xl font-semibold tracking-tight text-[var(--ui-ink)] sm:text-2xl">
           有什么文综问题？
         </h1>
-        <p className="mt-2 text-sm text-[var(--ui-ink-muted)]">
-          写下问题、选择模式后，在输入框旁点击发送
+        <p className="compose-hero-head__lead mt-2 text-sm text-[var(--ui-ink-muted)]">
+          写下问题、选模式，点右侧发送
         </p>
       </div>
 
@@ -93,8 +93,8 @@ export function QuestionComposePanel({
             onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={EJU_CHAT_PLACEHOLDER}
-            className="glass-input-field min-h-[112px] min-w-0 flex-1 resize-none border-0 bg-transparent text-base shadow-none focus-visible:ring-0 sm:min-h-[128px]"
-            rows={4}
+            className="glass-input-field compose-hero-textarea min-h-[112px] min-w-0 flex-1 resize-none border-0 bg-transparent text-base shadow-none focus-visible:ring-0 max-[720px]:min-h-[3.75rem] max-[720px]:text-[0.8125rem] sm:min-h-[128px]"
+            rows={3}
             disabled={isLoading}
           />
           <ComposeSendButton
@@ -105,9 +105,9 @@ export function QuestionComposePanel({
         </div>
 
         {suggestions.length > 0 && !hasQuestion && (
-          <div className="mt-5">
+          <div className="compose-hero-suggestions mt-5 max-[720px]:mt-2.5 max-[720px]:pb-0">
             <p className="compose-zone-label">试试这些问题</p>
-            <div className="flex flex-wrap gap-2.5">
+            <div className="compose-hero-suggestions__list flex flex-wrap gap-2.5 max-[720px]:flex-col max-[720px]:flex-nowrap max-[720px]:gap-2">
               {suggestions.map((s) => (
                 <button
                   key={s}
@@ -172,7 +172,7 @@ function ComposeSendButton({
         aria-label={isLoading ? "正在回答" : "发送"}
         className={cn(
           "glass-submit-btn rounded-full border-0 p-0",
-          compact ? "size-10" : "size-11"
+          compact ? "size-10" : "size-11 compose-hero-send-btn"
         )}
       >
         {isLoading ? (

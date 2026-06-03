@@ -23,7 +23,7 @@ export function HomeFloatCard({
       <div className="home-float-card__body">
         <div
           className={cn(
-            "home-float-card__icon-wrap flex shrink-0 items-center justify-center rounded-2xl text-primary-foreground",
+            "home-float-card__icon-wrap flex shrink-0 items-center justify-center rounded-full text-primary-foreground",
             accentClass
           )}
           aria-hidden
