@@ -3,20 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, ClipboardList, Globe2, GraduationCap, Menu } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { BookOpen, LayoutDashboard, Menu } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { BackToHomeLink } from "@/components/layout/back-to-home-link";
 import { shouldShowBottomNav } from "@/lib/bottom-nav-visibility";
 import { cn } from "@/lib/utils";
 
-/** 顶栏：各功能入口；个人主页在底栏 */
+/** 顶栏：仅保留管理后台入口；学习功能从首页进入，个人主页在底栏 */
 const navItems = [
-  { href: "/student", label: "AI 导师", icon: GraduationCap },
-  { href: "/map", label: "地图探索", icon: Globe2 },
-  { href: "/quiz", label: "Quiz 练习", icon: ClipboardList },
-  { href: "/teacher", label: "教师后台", icon: BookOpen },
+  { href: "/admin", label: "管理后台", icon: LayoutDashboard },
 ];
+
+function isAdminNavActive(pathname: string) {
+  return pathname.startsWith("/admin") || pathname.startsWith("/teacher");
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -50,7 +51,7 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-6 md:flex">
           {navItems.map(({ href, label, icon: Icon }) => {
-            const active = pathname.startsWith(href);
+            const active = href === "/admin" ? isAdminNavActive(pathname) : pathname.startsWith(href);
             return (
               <Link
                 key={href}
@@ -85,7 +86,7 @@ export function SiteHeader() {
                   onClick={() => goTo(href)}
                   className={cn(
                     buttonVariants({
-                      variant: pathname.startsWith(href) ? "secondary" : "ghost",
+                      variant: isAdminNavActive(pathname) ? "secondary" : "ghost",
                     }),
                     "w-full justify-start gap-2"
                   )}
